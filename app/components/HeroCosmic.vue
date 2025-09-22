@@ -3,57 +3,59 @@ import { Sparkles, ChevronDown } from 'lucide-vue-next'
 </script>
 
 <template>
-  <section class="relative overflow-hidden py-28 md:py-36">
-    <!-- мягкая «аура» -->
-    <div class="pointer-events-none absolute inset-0 -z-10 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]">
-      <div class="absolute left-1/2 top-0 size-[56rem] -translate-x-1/2 rounded-full
-                  bg-[radial-gradient(ellipse_at_center,_rgba(67,97,238,.35),_transparent_60%)] blur-3xl"></div>
+  <section class="relative overflow-hidden" :style="{ paddingTop: 'var(--hero-pt)' }">
+    <!-- мягкая аура сверху -->
+    <div class="pointer-events-none absolute inset-0 -z-10">
+      <div class="absolute left-1/2 top-[-20%] w-[1200px] h-[800px] -translate-x-1/2
+                  rounded-[50%] blur-3xl opacity-70
+                  bg-[radial-gradient(60%_45%_at_50%_30%,rgba(34,197,194,.25),transparent_60%)]" />
+      <!-- дот-сетка -->
+      <div class="absolute inset-0
+                  bg-[radial-gradient(rgba(255,255,255,.06)_1px,transparent_1px)]
+                  [background-size:24px_24px] [background-position:center]" />
     </div>
 
-    <!-- мелкие точки фона (если нужен StarfieldCanvas — просто раскомментируй)
-    <StarfieldCanvas class="absolute inset-0 -z-10 opacity-25" />
-    -->
+    <div class="container text-center text-white">
+      <h1
+        class="font-semibold tracking-tight"
+        :style="{
+          fontSize: 'var(--h1-mob)',
+          lineHeight: 'var(--h1-lh)',
+          letterSpacing: 'var(--h1-track)'
+        }"
+      >
+        <span class="hidden md:inline text-[var(--h1-desk)]"></span>
+        Unlock Your
+        <span class="bg-clip-text text-transparent
+                     bg-[linear-gradient(90deg,#7C5CFF,#52A7FF,#3EE5C3)]">
+          Cosmic
+        </span><br class="hidden md:block" />
+        Destiny
+      </h1>
 
-    <div class="container">
-      <div class="mx-auto max-w-3xl text-center">
-        <h1 class="text-[44px] leading-tight font-semibold tracking-tight md:text-[64px]">
-          Unlock Your
-          <span
-            class="bg-gradient-to-r from-[#7C5CFF] via-[#52A7FF] to-[#3EE5C3]
-                   bg-clip-text text-transparent"
-          >
-            Cosmic
-          </span>
-          <br class="hidden md:block" />
-          Destiny
-        </h1>
+      <p class="mt-6 text-[16px] leading-relaxed" :style="{ color: 'var(--lead)' }">
+        Discover the ancient wisdom of the stars with personalized astrology
+        readings that illuminate your path forward.
+      </p>
 
-        <p class="mt-5 text-white/70">
-          Discover the ancient wisdom of the stars with personalized astrology
-          readings that illuminate your path forward.
-        </p>
+      <div class="mt-10 flex items-center justify-center gap-6">
+        <NuxtLink
+          to="/astro"
+          class="inline-flex items-center gap-2 rounded-2xl px-5 py-3
+                 text-[14px] font-medium text-white transition hover:brightness-110 active:translate-y-px"
+          :style="{ background: 'var(--cta-grad)', boxShadow: 'var(--cta-glow)' }"
+        >
+          <Sparkles class="w-4 h-4" />
+          Start Your Journey
+        </NuxtLink>
 
-        <div class="mt-10 flex items-center justify-center gap-6">
-          <NuxtLink
-            to="/astro"
-            class="group inline-flex items-center gap-2 rounded-2xl px-5 py-3
-                   text-sm font-medium text-white
-                   bg-gradient-to-r from-[#8B5CF6] to-[#EC4899]
-                   shadow-[0_10px_30px_rgba(236,72,153,.3)]
-                   transition hover:brightness-110 active:translate-y-px"
-          >
-            <Sparkles class="h-4 w-4" />
-            Start Your Journey
-          </NuxtLink>
-
-          <button
-            type="button"
-            class="inline-flex items-center gap-2 text-sm text-white/70 transition hover:text-white"
-          >
-            Explore Services
-            <ChevronDown class="h-4 w-4" />
-          </button>
-        </div>
+        <button
+          type="button"
+          class="inline-flex items-center gap-2 text-[14px] text-white/80 transition hover:text-white"
+        >
+          Explore Services
+          <ChevronDown class="w-4 h-4" />
+        </button>
       </div>
     </div>
   </section>

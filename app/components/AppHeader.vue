@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { Sparkles } from 'lucide-vue-next' // иконки как Vue-компоненты (tree-shakable) :contentReference[oaicite:2]{index=2}
+
 const nav = [
+  { label: 'Cosmic',   to: '/' },
   { label: 'Readings', to: '/astro' },
   { label: 'Zodiac',   to: '/lunar' },
   { label: 'Services', to: '/tarot' },
@@ -8,39 +11,41 @@ const nav = [
 </script>
 
 <template>
-  <!-- «пилюля» фиксирована сверху по центру -->
+  <!-- фиксированная пилюля по центру -->
   <header class="fixed left-1/2 top-4 z-50 -translate-x-1/2">
     <div
-      class="flex h-14 items-center gap-6 rounded-full
-             border border-white/10 bg-[#14151a]/80 px-4 pl-3 pr-2
-             shadow-[inset_0_1px_0_rgba(255,255,255,.06),0_8px_24px_rgba(0,0,0,.45)]
-             backdrop-blur-xl">
-      <!-- логотип -->
-      <NuxtLink to="/" class="flex items-center gap-2 rounded-full px-2 py-1">
-        <span class="i-lucide-sparkles h-4 w-4 text-violet-400"></span>
-        <span class="text-sm font-medium tracking-wide text-white/90">Cosmic</span>
+      class="flex items-center rounded-full border backdrop-blur-xl"
+      :style="{
+        height: 'var(--hdr-h)',
+        background: 'var(--hdr-bg)',
+        borderColor: 'var(--hdr-ring)',
+        paddingInline: 'var(--hdr-pad-x)',
+        boxShadow: 'var(--hdr-shadow)'
+      }"
+    >
+      <!-- бренд -->
+      <NuxtLink to="/" class="flex items-center gap-2 px-2 py-1 text-white/90">
+        <Sparkles class="w-4 h-4 text-violet-300" />
+        <span class="text-[14px] font-semibold tracking-wide">Cosmic</span>
       </NuxtLink>
 
-      <!-- навигация -->
-      <nav class="hidden md:flex items-center gap-6 text-[13px] text-white/80">
+      <!-- навигация по центру -->
+      <nav class="hidden md:flex items-center mx-4" :style="{ gap: 'var(--hdr-gap)' }">
         <NuxtLink
-          v-for="item in nav" :key="item.to" :to="item.to"
-          class="transition hover:text-white/95"
+          v-for="i in nav" :key="i.to" :to="i.to"
+          class="text-[14px] text-white/75 hover:text-white transition"
           active-class="text-white"
         >
-          {{ item.label }}
+          {{ i.label }}
         </NuxtLink>
       </nav>
 
+      <!-- разделитель и CTA справа -->
       <div class="grow"></div>
-
-      <!-- CTA -->
       <NuxtLink
         to="/astro"
-        class="rounded-full px-4 py-2 text-sm font-medium text-white
-               bg-gradient-to-r from-[#845EF7] via-[#A15CF7] to-[#FF7AB3]
-               shadow-[0_6px_22px_rgba(168,78,255,.35)]
-               transition hover:brightness-110 active:translate-y-px"
+        class="rounded-full px-4 py-2 text-[14px] font-medium text-white transition hover:brightness-110 active:translate-y-px"
+        :style="{ background: 'var(--cta-grad)', boxShadow: 'var(--cta-glow)' }"
       >
         Get Reading
       </NuxtLink>
