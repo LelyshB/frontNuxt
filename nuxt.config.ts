@@ -4,7 +4,7 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@vueuse/motion/nuxt',
   ],
-  nitro: { compatibilityDate: '2025-09-22' }, // убирает предупреждение Nitro
+  nitro: { compatibilityDate: '2025-09-22' }, 
   tailwindcss: { viewer: true },
   app: {
     head: {
@@ -18,3 +18,5 @@ export default defineNuxtConfig({
     },
   },
 })
+
+
