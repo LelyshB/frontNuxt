@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* === DESIGN TOKENS (под скрин) === */
+:root{
+  /* Фон страницы */
+  --bg: #0f1117;
+
+  /* Пилюля-хедер */
+  --header-bg: rgba(27,30,40,0.75);   /* тёплый графит с блюром */
+  --header-br: 9999px;               /* full round */
+  --header-h: 56px;                  /* 56px как на скрине */
+  --header-ring: rgba(255,255,255,0.10);
+
+  /* Кнопка-градиент */
+  --grad-from: #7c3aed;  /* violet-500 */
+  --grad-via:  #d946ef;  /* fuchsia-500 */
+  --grad-to:   #ec4899;  /* pink-500 */
+  --grad-shadow: 0 15px 35px -12px rgba(216,70,239,0.60);
+
+  /* Заголовок героя */
+  --h1-size: clamp(40px, 7.2vw, 80px); /* адаптив как в лендингах */
+  --h1-kerning: -0.02em;
+  --h1-leading: 1.06;
+
+  /* Текст подзаголовка */
+  --subtle: rgba(255,255,255,0.70);
+
+  /* Дымка вверху */
+  --aura: rgba(34,197,194,0.25);
+
+  /* Дот-сеточка */
+  --dot: rgba(255,255,255,0.06);
+  --dot-size: 24px;
+
+  /* Контейнер ширина */
+  --container: 1152px; /* ~max-w-6xl, можно 1180 если нужно шире */
+}
+
+/* Единый контейнер */
+.container { max-width: var(--container); margin-inline: auto; padding-inline: 1rem; }
+
+/* Базовый фон */
+body { background: var(--bg); }
