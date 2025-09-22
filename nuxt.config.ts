@@ -1,22 +1,12 @@
-// nuxt.config.ts
 export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@vueuse/motion/nuxt',
   ],
-  nitro: { compatibilityDate: '2025-09-22' }, 
-  tailwindcss: { viewer: true },
-  app: {
-    head: {
-      title: 'AstroAi',
-      meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1' }],
-      link: [
-        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap' },
-      ],
-    },
-  },
+  // либо вообще УБЕРИ свой css:[] (модуль и так подключит файл),
+  // либо оставь, но с '@/' — без '~'.
+
+  tailwindcss: { cssPath: '@/assets/css/tailwind.css', viewer: true },
+
+  compatibilityDate: '2025-09-22', // заодно убирает варнинг Nitro
 })
-
-

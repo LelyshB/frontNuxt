@@ -1,27 +1,34 @@
-/* === Pixel tokens for header & hero (can be tuned) === */
+/* assets/css/tailwind.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* твои токены и базовые стили */
 :root{
-  /* контейнер */
-  --container: 1160px;     /* ширина макета */
-  /* header pill */
-  --hdr-h: 60px;           /* ВЫСОТА шапки (увеличили) */
+  --bg: #0f1117;
+  --container: 1160px;
+
+  /* header */
+  --hdr-h: 60px;
   --hdr-bg: rgba(20,21,26,0.80);
   --hdr-ring: rgba(255,255,255,0.10);
-  --hdr-pad-x: 16px;       /* боковые паддинги внутри пилюли */
-  --hdr-gap: 28px;         /* расстояние между пунктами меню */
+  --hdr-pad-x: 16px;
+  --hdr-gap: 28px;
   --hdr-shadow: 0 8px 24px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06);
 
   /* hero */
-  --h1-desk: 72px;         /* размер заголовка на десктопе */
-  --h1-mob: 44px;          /* на мобилках */
-  --h1-lh: 1.12;           /* межстрочный */
-  --h1-track: -0.02em;     /* кернинг */
+  --h1-desk: 72px;
+  --h1-mob: 44px;
+  --h1-lh: 1.12;
+  --h1-track: -0.02em;
   --lead: rgba(255,255,255,0.70);
-  --hero-pt: 140px;        /* верхний отступ секции (учитывает фикс. шапку + воздух) */
+  --hero-pt: 140px;
 
   /* CTA */
   --cta-grad: linear-gradient(90deg,#8B5CF6,#D946EF,#EC4899);
   --cta-glow: 0 16px 36px -12px rgba(236,72,153,.40);
 }
 
-/* контейнер по макету */
-.container { max-width: var(--container); margin-inline: auto; padding-inline: 16px; }
+/* контейнер и фон */
+.container{max-width:var(--container);margin-inline:auto;padding-inline:16px}
+body{background:var(--bg)}
