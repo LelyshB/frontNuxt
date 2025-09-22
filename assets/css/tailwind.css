@@ -1,34 +1,30 @@
-/* assets/css/tailwind.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* твои токены и базовые стили */
+/* === design tokens для 1-в-1 === */
 :root{
-  --bg: #0f1117;
-  --container: 1160px;
+  --bg:#0e1016;                 /* фон страницы */
+  --container: 1240px;          /* ширина сетки как в референсе */
 
-  /* header */
-  --hdr-h: 60px;
-  --hdr-bg: rgba(20,21,26,0.80);
-  --hdr-ring: rgba(255,255,255,0.10);
-  --hdr-pad-x: 16px;
-  --hdr-gap: 28px;
-  --hdr-shadow: 0 8px 24px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06);
+  /* Header pill */
+  --hdr-h: 64px;                /* высота пилюли */
+  --hdr-max: 1180px;            /* её максимальная ширина */
+  --hdr-gap: 40px;              /* расстояние между пунктами меню */
+  --hdr-shadow: 0 12px 28px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06);
 
-  /* hero */
-  --h1-desk: 72px;
-  --h1-mob: 44px;
-  --h1-lh: 1.12;
+  /* Hero */
+  --hero-pt: 180px;             /* отступ сверху до заголовка */
+  --h1: 88px;                   /* размер заголовка */
+  --h1-lh: 1.10;
   --h1-track: -0.02em;
-  --lead: rgba(255,255,255,0.70);
-  --hero-pt: 140px;
+  --lead: rgba(255,255,255,.72);/* цвет подзаголовка */
 
   /* CTA */
-  --cta-grad: linear-gradient(90deg,#8B5CF6,#D946EF,#EC4899);
-  --cta-glow: 0 16px 36px -12px rgba(236,72,153,.40);
+  --cta-grad: linear-gradient(90deg,#8B5CF6,#9E5AF6,#EC4899);
+  --cta-glow: 0 22px 44px -16px rgba(236,72,153,.45);
 }
 
 /* контейнер и фон */
-.container{max-width:var(--container);margin-inline:auto;padding-inline:16px}
+.container{max-width:var(--container);margin-inline:auto;padding-inline:24px}
 body{background:var(--bg)}
