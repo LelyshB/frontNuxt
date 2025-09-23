@@ -1,5 +1,5 @@
 <template>
-  <main class="min-h-dvh text-white">
+  <main class="min-h-dvh">
     <HeroCosmic />
   </main>
 </template>

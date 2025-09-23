@@ -2,29 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-/* === design tokens для 1-в-1 === */
+/* === design tokens (fluid) === */
 :root{
-  --bg:#0e1016;                 /* фон страницы */
-  --container: 1240px;          /* ширина сетки как в референсе */
+  /* layout */
+  --bg: #0e1016;
+  --container: 1240px;
+  --page-pad: 24px;
 
-  /* Header pill */
-  --hdr-h: 64px;                /* высота пилюли */
-  --hdr-max: 1180px;            /* её максимальная ширина */
-  --hdr-gap: 40px;              /* расстояние между пунктами меню */
+  /* header pill */
+  --hdr-h: 64px;
+  --hdr-max: 1180px;
   --hdr-shadow: 0 12px 28px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06);
 
-  /* Hero */
-  --hero-pt: 180px;             /* отступ сверху до заголовка */
-  --h1: 88px;                   /* размер заголовка */
+  /* hero */
+  --hero-top: 180px;                    /* отступ от верха до заголовка */
+  --h1: clamp(40px, 6.2vw, 88px);       /* fluid размер H1 */
   --h1-lh: 1.10;
-  --h1-track: -0.02em;
-  --lead: rgba(255,255,255,.72);/* цвет подзаголовка */
-
-  /* CTA */
-  --cta-grad: linear-gradient(90deg,#8B5CF6,#9E5AF6,#EC4899);
-  --cta-glow: 0 22px 44px -16px rgba(236,72,153,.45);
+  --h1-trk: -0.02em;
+  --lead: rgba(255,255,255,.72);
 }
 
 /* контейнер и фон */
-.container{max-width:var(--container);margin-inline:auto;padding-inline:24px}
+.container{max-width:var(--container);margin-inline:auto;padding-inline:var(--page-pad)}
 body{background:var(--bg)}
