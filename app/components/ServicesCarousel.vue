@@ -1,49 +1,145 @@
+<template>
+  <!-- A simple carousel showcasing the services offered by the site.  The
+       carousel can be navigated via arrows or dots and auto‑plays
+       through the items. -->
+  <div
+    class="relative overflow-hidden"
+    @mouseenter="carousel.pause"
+    @mouseleave="carousel.resume"
+    @focusin="carousel.pause"
+    @focusout="carousel.resume"
+    id="services"
+  >
+    <!-- Gradient masks at the edges -->
+    <div class="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-bg-950 to-transparent z-10 pointer-events-none" />
+    <div class="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-bg-950 to-transparent z-10 pointer-events-none" />
+    <!-- Carousel container -->
+    <div
+      ref="scrollRef"
+      class="flex gap-8 py-8 snap-x snap-mandatory overflow-x-auto scrollbar-hide"
+      role="region"
+      aria-label="Services carousel"
+      :aria-live="carousel.isPlaying ? 'polite' : 'off'"
+    >
+      <div
+        v-for="(service, index) in services"
+        :key="service.id"
+        class="flex-shrink-0 w-80 snap-center transition-all duration-200 ease-cosmic transform-gpu"
+        :class="getCardScale(index)"
+      >
+        <GlowCard :glowIntensity="index === carousel.currentIndex ? 'high' : 'low'" class="h-full">
+          <div class="text-center space-y-6">
+            <!-- Service Icon -->
+            <div class="flex justify-center">
+              <OrbitIcon :iconName="service.iconName" size="lg" />
+            </div>
+            <!-- Service Content -->
+            <div>
+              <h3 class="font-heading font-bold text-xl text-text-base mb-3">
+                {{ service.title }}
+              </h3>
+              <p class="text-text-muted leading-relaxed mb-6">
+                {{ service.description }}
+              </p>
+              <button class="inline-flex items-center gap-2 text-violet hover:text-magenta transition-colors duration-200 font-medium">
+                Learn more
+                <component :is="ArrowRightIcon" :size="16" />
+              </button>
+            </div>
+          </div>
+        </GlowCard>
+      </div>
+    </div>
+    <!-- Navigation Controls -->
+    <div class="flex justify-center items-center gap-4 mt-8">
+      <!-- Previous Button -->
+      <button
+        @click="carousel.prev"
+        class="p-2 glass-surface glass-hover rounded-full focus-cosmic transition-all duration-200"
+        aria-label="Previous service"
+      >
+        <component :is="ChevronLeftIcon" :size="20" class="text-text-base" />
+      </button>
+      <!-- Dot Indicators -->
+      <div class="flex gap-2" role="tablist" aria-label="Service indicators">
+        <button
+          v-for="(service, index) in services"
+          :key="`dot-${service.id}`"
+          @click="carousel.goTo(index)"
+          class="w-2 h-2 rounded-full transition-all duration-200 focus-cosmic"
+          :class="index === carousel.currentIndex ? 'bg-amethyst shadow-glow-violet' : 'bg-text-muted/30 hover:bg-text-muted/50'"
+          role="tab"
+          :aria-selected="index === carousel.currentIndex"
+          :aria-label="`Go to ${service.title}`"
+        />
+      </div>
+      <!-- Next Button -->
+      <button
+        @click="carousel.next"
+        class="p-2 glass-surface glass-hover rounded-full focus-cosmic transition-all duration-200"
+        aria-label="Next service"
+      >
+        <component :is="ChevronRightIcon" :size="20" class="text-text-base" />
+      </button>
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
-import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
-import { ref, onMounted } from 'vue'
-const rail = ref<HTMLDivElement | null>(null)
-const scrollBy = (dx: number) => rail.value?.scrollBy({ left: dx, behavior: 'smooth' })
+import GlowCard from "~/components/GlowCard.vue";
+// Composable for carousel behaviour
+const services = [
+  { id: '1', title: 'Birth Chart Analysis', description: 'Unlock the secrets written in the stars at your moment of birth', iconName: 'Sparkles' },
+  { id: '2', title: 'Relationship Compatibility', description: 'Discover the cosmic chemistry between you and your partner', iconName: 'Target' },
+  { id: '3', title: 'Career Path Guidance', description: 'Align your professional journey with celestial wisdom', iconName: 'Crown' },
+  { id: '4', title: 'Transit Forecasting', description: 'Navigate upcoming celestial influences and opportunities', iconName: 'Wind' }
+]
 
-const items = Array.from({ length: 8 }, (_, i) => ({
-  title: `Сервис ${i+1}`, desc: 'Короткое описание', href: '/astro'
-}))
+const ArrowRightIcon = resolveComponent('IconArrowRight')
+const ChevronLeftIcon = resolveComponent('IconChevronLeft')
+const ChevronRightIcon = resolveComponent('IconChevronRight')
+const scrollRef = ref<HTMLElement | null>(null)
 
-// авто-прокрутка (мягко)
-let t: number | null = null
+const carousel = useCarousel({
+  itemCount: services.length,
+  autoplayDelay: 4000,
+  startIndex: 1
+})
+
+const getCardScale = (index: number) => {
+  if (index === carousel.currentIndex) return 'scale-100 opacity-100'
+  return 'scale-95 opacity-75'
+}
+
+// Keyboard navigation for accessibility
+const handleKeydown = (event: KeyboardEvent) => {
+  switch (event.key) {
+    case 'ArrowLeft':
+      event.preventDefault()
+      carousel.prev()
+      break
+    case 'ArrowRight':
+      event.preventDefault()
+      carousel.next()
+      break
+  }
+}
+
 onMounted(() => {
-  t = window.setInterval(() => scrollBy(280), 3500)
+  document.addEventListener('keydown', handleKeydown)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleKeydown)
 })
 </script>
 
-<template>
-  <section class="py-10">
-    <div class="container">
-      <div class="flex items-center justify-between mb-4">
-        <h3 class="text-xl font-semibold">Сервисы</h3>
-        <div class="flex gap-2">
-          <button class="size-9 grid place-items-center rounded-full border hover:bg-gray-100" @click="scrollBy(-320)">
-            <ChevronLeft class="w-5 h-5" />
-          </button>
-          <button class="size-9 grid place-items-center rounded-full border hover:bg-gray-100" @click="scrollBy(320)">
-            <ChevronRight class="w-5 h-5" />
-          </button>
-        </div>
-      </div>
-
-      <div ref="rail"
-        class="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2
-               [-ms-overflow-style:none] [scrollbar-width:none]"
-        style="-webkit-overflow-scrolling:touch">
-        <div v-for="it in items" :key="it.title" class="min-w-[280px] snap-start">
-          <UiGlowCard>
-            <div class="text-base font-medium">{{ it.title }}</div>
-            <div class="opacity-70 text-sm mt-1">{{ it.desc }}</div>
-            <NuxtLink :to="it.href" class="inline-block mt-3 text-sm text-gray-900 underline-offset-4 hover:underline">
-              Перейти
-            </NuxtLink>
-          </UiGlowCard>
-        </div>
-      </div>
-    </div>
-  </section>
-</template>
+<style scoped>
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+</style>

@@ -1,0 +1,185 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Cosmic theme variables and component classes.  This file defines a
+  colour system using CSS custom properties which are referenced from
+  the Tailwind configuration.  It also includes component classes for
+  glass surfaces, gradient text, buttons and more.  These styles are
+  largely inspired by the reference implementation of the Cosmic
+  astrology site and are used by the components in this project.
+*/
+
+@layer base {
+  :root {
+    /* Background System */
+    --bg-950: 249 39% 4%;      /* #07060B - deep space */
+    --bg-900: 255 28% 6%;      /* #0A0914 - primary background */
+    --surface: 248 31% 12%;     /* #141326 - cards and surfaces */
+
+    /* Text System */
+    --text-base: 249 45% 95%;  /* #ECEAF7 - primary text */
+    --text-muted: 251 23% 78%; /* #B9B5D1 - secondary text */
+
+    /* Accent Colors (Amethyst → Aurora Teal, Rose, Amber) */
+    --amethyst: 260 100% 68%;   /* #9B5CFF */
+    --aurora-teal: 170 77% 56%; /* #3FE0C5 */
+    --rose: 320 100% 71%;       /* #FF6BCB */
+    --amber: 43 85% 54%;        /* #F0B429 */
+
+    /* Legacy aliases for backward compatibility */
+    --violet: var(--amethyst);
+    --magenta: var(--rose);
+    --mint: var(--aurora-teal);
+    --starlight: var(--amber);
+
+    /* Gradient Tokens */
+    --gradient-cosmic: linear-gradient(135deg, hsl(var(--amethyst)), hsl(var(--aurora-teal)));
+
+    /* Border System */
+    --border-default: hsla(0, 0%, 100%, 0.06);
+    --border-hover: hsla(0, 0%, 100%, 0.10);
+    --border-focus: hsl(var(--amethyst) / 0.4);
+
+    /* Shadows & Glows */
+    --glow-violet: 0 0 28px hsl(var(--amethyst) / 0.28);
+    --glow-magenta: 0 0 28px hsl(var(--aurora-teal) / 0.24);
+
+    /* Animation Curves */
+    --ease-cosmic: cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  * {
+    border-color: var(--border-default);
+  }
+  
+  body {
+    @apply bg-bg-950 text-text-base font-body;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* Typography System */
+  h1, h2, h3 {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .font-heading {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .font-body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* Focus System */
+  .focus-cosmic {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-950;
+  }
+  .focus-cosmic:focus-visible {
+    --tw-ring-color: hsl(var(--violet) / 0.4);
+  }
+}
+
+@layer components {
+  /* Glass Effect */
+  .glass-surface {
+    @apply backdrop-blur-xl border;
+    background-color: hsl(var(--surface) / 0.8);
+    border-color: var(--border-default);
+  }
+
+  .glass-hover:hover {
+    background-color: hsl(var(--surface) / 0.9);
+    border-color: var(--border-hover);
+  }
+
+  /* Gradient Text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-amethyst to-aurora-teal bg-clip-text text-transparent;
+  }
+
+  /* Button Variants */
+  .btn-primary {
+    @apply relative inline-flex items-center justify-center px-8 py-4 rounded-full bg-gradient-to-r from-violet to-aurora-teal text-white font-medium transform-gpu transition-all duration-200 ease-out;
+    @apply hover:scale-[1.02] hover:shadow-lg focus-cosmic;
+  }
+
+  .btn-secondary {
+    @apply relative inline-flex items-center justify-center px-8 py-4 rounded-full border border-violet text-violet font-medium transform-gpu transition-all duration-200 ease-out;
+    @apply hover:bg-violet hover:text-white focus-cosmic;
+  }
+
+  .cta-button {
+    @apply btn-primary;
+  }
+
+  /* Orbital Animation */
+  @keyframes orbit {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .orbit-ring {
+    animation: orbit 20s linear infinite;
+  }
+
+  /* Reduced Motion Support */
+  @media (prefers-reduced-motion: reduce) {
+    .orbit-ring { animation: none; }
+  }
+
+  /*
+    3D Tilt Hover Effect
+    This class adds a subtle 3D tilt when hovering over a card.  It
+    uses a perspective transform to give depth and leverages the
+    custom easing curve defined in the CSS variables.  Without the
+    hover state, the element remains flat.  Inspired by the
+    reference implementation where zodiac and service cards tilt
+    slightly on hover to invite interaction.
+  */
+  .tilt-hover {
+    transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0);
+    transition: transform 0.3s var(--ease-cosmic);
+  }
+
+  .tilt-hover:hover {
+    transform: perspective(1000px) rotateX(-2deg) rotateY(4deg) translateZ(8px);
+  }
+
+  /*
+    Shimmer Effect
+    Adds a moving highlight across the surface of a component.  A
+    pseudo‑element is animated from left to right using the
+    `shimmer` keyframes defined in the Tailwind config.  This effect
+    is used on glow cards and zodiac cards to create a sense of
+    energy.
+  */
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shimmer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+    animation: shimmer 2.3s ease-in-out infinite;
+  }
+
+  /* Hide scrollbars helper.  This utility class hides native
+     scrollbars for horizontally scrolling containers while
+     preserving scroll functionality. */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+  }
+}
