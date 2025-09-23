@@ -1,53 +1,51 @@
 <script setup lang="ts">
-import { Sparkles, ChevronDown } from 'lucide-vue-next'
+import { Sparkles } from 'lucide-vue-next'
 </script>
 
 <template>
-  <section class="relative overflow-hidden pb-28 pt-[140px]">
-    <!-- фон -->
-    <div class="pointer-events-none absolute inset-0 -z-10">
-      <div class="absolute left-1/2 top-[-120px] -translate-x-1/2 w-[920px] h-[620px]
-                  rounded-[50%] blur-3xl opacity-80
-                  bg-[radial-gradient(60%_45%_at_50%_35%,rgba(16,185,129,.28),transparent_60%)]"></div>
-      <div class="absolute inset-0 opacity-[.28]
-                  bg-[radial-gradient(rgba(255,255,255,.06)_1px,transparent_1px)]
-                  [background-size:24px_24px] [background-position:center]"></div>
-    </div>
+  <section class="relative">
+    <!-- мягкая бирюзовая аура -->
+    <div
+      class="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 h-[520px] w-[920px] rounded-[520px] blur-[80px]"
+      style="background: radial-gradient(closest-side, rgba(16,196,172,.22), rgba(16,196,172,0));"
+    />
 
-    <div class="container">
-      <!-- центрируем блок относительно экрана минуя высоту шапки -->
-      <div class="grid min-h-[calc(100svh-64px-80px)] place-items-center">
-        <div class="mx-auto max-w-[980px] text-center">
-          <h1 class="font-semibold tracking-[-0.02em] leading-[1.10]
-                     text-[clamp(40px,6.2vw,88px)]">
-            Unlock Your
-            <span class="bg-clip-text text-transparent
-                         bg-[linear-gradient(90deg,#7C5CFF,#52A7FF,#3EE5C3)]">
-              Cosmic
-            </span><br/>Destiny
-          </h1>
+    <div class="container pt-[var(--hero-pt)] pb-20">
+      <div class="max-w-[920px] mx-auto text-center">
+        <!-- H1 -->
+        <h1 class="text-white font-extrabold leading-[var(--h1-lh)] tracking-[-0.02em] text-[var(--h1)]">
+          Unlock Your
+          <span
+            class="bg-gradient-to-r from-[#8b5cf6] via-[#6b8efb] to-[#22d3ee] bg-clip-text text-transparent"
+          >Cosmic</span>
+          <br />
+          Destiny
+        </h1>
 
-          <p class="mt-7 text-[clamp(16px,1.6vw,20px)] leading-relaxed text-white/70">
-            Discover the ancient wisdom of the stars with personalized astrology
-            readings that illuminate your path forward.
-          </p>
+        <!-- Lead -->
+        <p class="mt-6 text-lg text-white/70">
+          Discover the ancient wisdom of the stars with personalized astrology
+          readings that illuminate your path forward.
+        </p>
 
-          <div class="mt-10 flex items-center justify-center gap-10">
-            <NuxtLink to="/start"
-              class="inline-flex items-center gap-2 px-7 h-[56px] md:h-[68px]
-                     rounded-[28px] md:rounded-[34px] text-[15px] md:text-[16px]
-                     font-semibold text-white transition hover:brightness-110 active:translate-y-px
-                     bg-[linear-gradient(90deg,#8B5CF6,#9E5AF6,#EC4899)]
-                     shadow-[0_22px_44px_-16px_rgba(236,72,153,.45)]">
-              <Sparkles class="w-5 h-5"/>
-              Start Your Journey
-            </NuxtLink>
+        <!-- CTA row -->
+        <div class="mt-10 flex items-center justify-center gap-6">
+          <NuxtLink
+            to="/readings"
+            class="inline-flex items-center gap-2 rounded-full px-7 h-[56px] text-[15px] font-semibold text-white"
+            style="background: var(--cta-grad); box-shadow: var(--cta-glow);"
+          >
+            <Sparkles size="18" />
+            Start Your Journey
+          </NuxtLink>
 
-            <button type="button" class="inline-flex items-center gap-2 text-[16px] text-white/80 hover:text-white">
-              Explore Services
-              <ChevronDown class="w-4 h-4"/>
-            </button>
-          </div>
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 text-white/85 hover:text-white transition-colors text-[15px]"
+          >
+            Explore Services
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="opacity-80"><path d="M8 10l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
         </div>
       </div>
     </div>
