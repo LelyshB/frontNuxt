@@ -1,0 +1,28 @@
+.nuxt
+.output
+.server
+.cache
+
+# Node
+node_modules
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+*.log
+
+# Env
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Hosting
+.vercel
+.netlify
+.nuxt/
+.output/
+node_modules/

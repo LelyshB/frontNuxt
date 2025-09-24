@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss'
+import tailwindcssAnimate from 'tailwindcss-animate'
 
 /**
  * Tailwind configuration copied from the original React project.  It
@@ -7,7 +8,7 @@ import type { Config } from 'tailwindcss'
  * globs point at the new Nuxt project's directory structure.
  */
 const config: Config = {
-  darkMode: ['class'],
+  darkMode: 'class',
   content: [
     './components/**/*.{js,vue,ts}',
     './layouts/**/*.vue',
@@ -137,7 +138,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [tailwindcssAnimate],
 }
 
 export default config
