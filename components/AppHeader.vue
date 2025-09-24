@@ -1,84 +1,83 @@
 <template>
-  <!--
-    Responsive application header. It sticks to the top of the page and
-    changes its background opacity when the page is scrolled. The
-    navigation collapses into a mobile menu on smaller breakpoints.
-  -->
-  <header
-    :class="[
-      'fixed top-0 left-0 w-full z-50 transition-all duration-300',
-      isScrolled ? 'bg-bg-900/70 backdrop-blur-md shadow-glass' : 'bg-transparent'
-    ]"
-  >
-    <div class="container mx-auto flex justify-between items-center py-4">
-      <!-- Logo / Title -->
-      <a href="#" class="flex items-center space-x-2 gradient-text text-2xl font-bold">
-        <span>Cosmic</span>
-      </a>
-      <!-- Desktop navigation -->
-      <nav class="hidden md:flex space-x-8">
-        <a
-          v-for="item in navItems"
-          :key="item.name"
-          :href="item.href"
-          class="text-text-muted hover:text-white transition-colors duration-200"
-        >
-          {{ item.name }}
-        </a>
-      </nav>
-      <!-- Desktop CTA button -->
-      <a
-        href="#readings"
-        class="hidden md:inline-flex btn-cosmic ml-6"
-      >
-        Get Reading
-      </a>
-      <!-- Mobile menu toggle -->
-      <button
-        @click="toggleMenu"
-        class="md:hidden p-2 rounded-full glass-surface glass-hover focus-cosmic transform-gpu transition-transform duration-200 hover:scale-110"
-        aria-label="Toggle menu"
-      >
-        <component :is="isMenuOpen ? XIcon : MenuIcon" class="w-6 h-6 text-text-base" />
-      </button>
-    </div>
-    <!-- Mobile navigation dropdown -->
-    <transition name="fade">
+  <header :class="['fixed top-0 left-0 right-0 z-50 transition-all duration-300', isScrolled ? 'py-3' : 'py-4']">
+    <nav class="container mx-auto px-4">
       <div
-        v-if="isMenuOpen"
-        class="md:hidden bg-bg-900/90 backdrop-blur-md shadow-glass absolute top-full left-0 w-full py-4"
+        :class="[
+          'glass-surface glass-hover flex items-center justify-between gap-4 rounded-full px-6 py-3 transition-all duration-300 backdrop-blur-xl',
+          isScrolled ? 'shadow-glass' : ''
+        ]"
       >
-        <nav class="flex flex-col space-y-4 items-center">
+        <a href="#hero" class="flex items-center gap-3 text-text-base focus-cosmic">
+          <span class="sr-only">Cosmic home</span>
+          <div class="relative flex h-10 w-10 items-center justify-center">
+            <Star class="h-8 w-8 text-violet" fill="currentColor" />
+            <div class="absolute inset-0 animate-pulse">
+              <Star class="h-8 w-8 text-magenta opacity-50" />
+            </div>
+          </div>
+          <span class="font-heading text-xl font-bold">Cosmic</span>
+        </a>
+
+        <div class="hidden items-center space-x-6 md:flex">
           <a
             v-for="item in navItems"
             :key="item.name"
             :href="item.href"
-            @click="closeMenu"
-            class="text-text-muted hover:text-white transition-colors duration-200"
+            class="group relative inline-flex items-center px-4 py-2 text-sm font-medium text-text-muted transition-colors duration-300 focus-cosmic after:absolute after:left-1/2 after:-bottom-1 after:h-[2px] after:w-full after:-translate-x-1/2 after:origin-center after:scale-x-0 after:bg-gradient-to-r after:from-violet after:to-aurora-teal after:transition-transform after:duration-300 after:content-[''] group-hover:text-white group-hover:after:scale-x-100"
+            :class="{ 'text-white after:scale-x-100': activeSection === item.href }"
+            :aria-current="activeSection === item.href ? 'page' : undefined"
+            @click="handleNavSelect(item.href)"
           >
             {{ item.name }}
           </a>
-          <a
-            href="#readings"
-            class="btn-cosmic mt-2"
-            @click="closeMenu"
-          >
+        </div>
+
+        <div class="hidden md:block">
+          <a href="#readings" class="btn-cosmic text-sm">
             Get Reading
           </a>
-        </nav>
+        </div>
+
+        <button
+          @click="toggleMenu"
+          class="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-full glass-surface glass-hover focus-cosmic transition-transform duration-200 hover:scale-110"
+          aria-label="Toggle menu"
+        >
+          <component :is="isMenuOpen ? XIcon : MenuIcon" class="h-5 w-5 text-text-base" />
+        </button>
       </div>
-    </transition>
+
+      <transition name="fade">
+        <div
+          v-if="isMenuOpen"
+          class="md:hidden mt-4 rounded-2xl glass-surface p-6 backdrop-blur-xl shadow-glass"
+        >
+          <nav class="space-y-4">
+            <a
+              v-for="item in navItems"
+              :key="item.name"
+              :href="item.href"
+              class="block rounded-lg px-4 py-3 text-text-base transition-colors duration-200 hover:bg-surface/60 hover:text-white focus-cosmic"
+              @click="handleNavSelect(item.href)"
+            >
+              {{ item.name }}
+            </a>
+            <div class="border-t border-white/10 pt-4">
+              <a href="#readings" class="btn-cosmic w-full" @click="closeMenu">
+                Get Reading
+              </a>
+            </div>
+          </nav>
+        </div>
+      </transition>
+    </nav>
   </header>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-// Import icon components from lucide for Vue.  Users must install the
-// `lucide-vue-next` package to use these icons.  If the package is
-// unavailable the icons can be swapped for custom SVGs.
-import { Menu as MenuIcon, X as XIcon } from 'lucide-vue-next'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { Menu as MenuIcon, Star, X as XIcon } from 'lucide-vue-next'
 
-// Navigation items used in both desktop and mobile menus.
 const navItems = [
   { name: 'Readings', href: '#readings' },
   { name: 'Zodiac', href: '#zodiac' },
@@ -86,9 +85,17 @@ const navItems = [
   { name: 'About', href: '#about' },
 ]
 
-// Reactive state for menu toggling and scroll detection
 const isMenuOpen = ref(false)
 const isScrolled = ref(false)
+const activeSection = ref(navItems[0]?.href ?? '#hero')
+let scrollHandler: (() => void) | null = null
+let sectionObserver: IntersectionObserver | null = null
+
+function isSectionEntry(
+  entry: IntersectionObserverEntry
+): entry is IntersectionObserverEntry & { target: HTMLElement } {
+  return entry.target instanceof HTMLElement
+}
 
 function toggleMenu() {
   isMenuOpen.value = !isMenuOpen.value
@@ -98,15 +105,52 @@ function closeMenu() {
   isMenuOpen.value = false
 }
 
+function handleNavSelect(href: string) {
+  activeSection.value = href
+  closeMenu()
+}
+
 onMounted(() => {
-  const handleScroll = () => {
+  if (typeof window === 'undefined') return
+
+  scrollHandler = () => {
     isScrolled.value = window.scrollY > 20
   }
-  window.addEventListener('scroll', handleScroll)
-  handleScroll()
-  onUnmounted(() => {
-    window.removeEventListener('scroll', handleScroll)
-  })
+  window.addEventListener('scroll', scrollHandler)
+  scrollHandler()
+
+  const sections = navItems
+    .map((item) => {
+      const target = document.querySelector(item.href)
+      return target instanceof HTMLElement ? target : null
+    })
+    .filter((section): section is HTMLElement => Boolean(section))
+
+  if (sections.length) {
+    sectionObserver = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter(isSectionEntry)
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
+        if (visible.length > 0) {
+          const [topEntry] = visible
+          if (topEntry) {
+            activeSection.value = `#${topEntry.target.id}`
+          }
+        }
+      },
+      { rootMargin: '-45% 0px -45% 0px', threshold: [0.2, 0.4, 0.6] }
+    )
+    sections.forEach((section) => sectionObserver?.observe(section))
+  }
+})
+
+onBeforeUnmount(() => {
+  if (scrollHandler) {
+    window.removeEventListener('scroll', scrollHandler)
+  }
+  sectionObserver?.disconnect()
 })
 </script>
 
