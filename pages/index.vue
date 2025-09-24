@@ -22,7 +22,10 @@
           readings that illuminate your path forward.
         </p>
         <div class="flex flex-wrap justify-center gap-4">
-          <a href="#readings" class="btn-cosmic">Start Your Journey</a>
+          <a href="#readings" class="btn-cosmic group inline-flex items-center justify-center">
+            <span>Start Your Journey</span>
+            <Sparkles class="ml-2 h-5 w-5 transition-transform duration-200 group-hover:animate-pulse" />
+          </a>
           <a href="#services" class="btn-cosmic">Explore Services</a>
         </div>
       </section>
@@ -45,7 +48,7 @@
             :description="sign.description"
           >
             <template #icon>
-              <component :is="sign.Icon" class="w-6 h-6 text-amethyst" />
+              <OrbitIcon :icon="sign.Icon" size="lg" class="mx-auto" />
             </template>
           </ZodiacBadge>
         </div>
@@ -60,18 +63,38 @@
         <ServicesCarousel />
       </section>
       <!-- Call to action -->
-      <section id="cta" class="container mx-auto py-24 text-center">
-        <h2 class="text-3xl md:text-4xl font-heading font-bold mb-4">
-          Ready to Begin Your Cosmic Journey?
-        </h2>
-        <p class="max-w-2xl mx-auto text-text-muted mb-8">
-          Get personalized insights that illuminate your path, reveal your
-          potential, and guide you toward your highest purpose.
-        </p>
-        <div class="flex flex-wrap justify-center gap-4">
-          <a href="#readings" class="btn-cosmic">Get My Reading</a>
-          <a href="#about" class="btn-cosmic">Learn More</a>
-        </div>
+      <section id="cta" class="container mx-auto py-24">
+        <GlowCard class="mx-auto max-w-2xl text-center" hover3d glowIntensity="high">
+          <div class="space-y-6">
+            <div class="relative mx-auto h-16 w-16">
+              <Star class="h-16 w-16 animate-pulse text-violet" fill="currentColor" />
+              <div class="absolute inset-0 animate-spin" style="animation-duration: 20s">
+                <Star class="h-16 w-16 text-magenta opacity-30" />
+              </div>
+            </div>
+            <div class="space-y-4">
+              <h2 class="gradient-text font-heading text-3xl font-bold sm:text-4xl">
+                Ready to Begin Your Cosmic Journey?
+              </h2>
+              <p class="mx-auto max-w-xl text-text-muted leading-relaxed">
+                Get personalized insights that illuminate your path, reveal your
+                potential, and guide you toward your highest purpose.
+              </p>
+            </div>
+            <div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <a href="#readings" class="btn-cosmic group inline-flex items-center justify-center">
+                <span>Get My Reading</span>
+                <ArrowRight class="ml-2 h-5 w-5 transition-transform duration-200 group-hover:translate-x-1" />
+              </a>
+              <a
+                href="#about"
+                class="px-6 py-3 text-text-muted transition-colors duration-200 hover:text-violet focus-cosmic"
+              >
+                Learn More
+              </a>
+            </div>
+          </div>
+        </GlowCard>
       </section>
     </main>
     <!-- Footer -->
@@ -99,6 +122,8 @@ import AppHeader from '@/components/AppHeader.vue'
 import SectionHeader from '@/components/SectionHeader.vue'
 import ServicesCarousel from '@/components/ServicesCarousel.vue'
 import ZodiacBadge from '@/components/ZodiacBadge.vue'
+import GlowCard from '@/components/GlowCard.vue'
+import OrbitIcon from '@/components/OrbitIcon.vue'
 import {
   Star,
   Shield,
@@ -112,6 +137,7 @@ import {
   BookOpen,
   Sparkles,
   Droplet,
+  ArrowRight,
 } from 'lucide-vue-next'
 
 // Define the list of zodiac signs.  Each entry includes a name,

@@ -7,6 +7,7 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
+    "typecheck": "nuxt typecheck",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
@@ -20,6 +21,7 @@
     "postcss": "latest",
     "tailwindcss": "latest",
     "tailwindcss-animate": "latest",
-    "typescript": "latest"
+    "typescript": "latest",
+    "vue-tsc": "^3.0.8"
   }
 }
