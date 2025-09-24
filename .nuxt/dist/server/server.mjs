@@ -1,0 +1,1 @@
+export { default } from "file:///home/sergey2/AstroAi_full/front-nuxt/node_modules/.pnpm/@nuxt+vite-builder@4.1.2_lightningcss@1.30.1_magicast@0.3.5_rollup@4.52.2_terser@5.44.0_1948718038ff19ab167fc703d596ae1e/node_modules/@nuxt/vite-builder/dist/runtime/vite-node.mjs"

@@ -1,0 +1,1 @@
+// front-nuxt/postcss.config.mjs
