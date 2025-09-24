@@ -75,7 +75,7 @@
                   <OrbitIcon
                     :icon="sign.Icon"
                     size="lg"
-                    class="mx-auto transform-gpu transition-transform [transition-duration:260ms] ease-[var(--ease-cosmic)] group-hover/card:[transition-duration:150ms] group-hover/card:rotate-[12deg] group-hover/card:scale-[1.08] motion-reduce:group-hover/card:transform-none"
+                    class="mx-auto transition-transform duration-500 ease-[var(--ease-cosmic)]"
                   />
                 </template>
               </ZodiacBadge>
