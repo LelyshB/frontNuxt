@@ -38,17 +38,18 @@ onMounted(() => {
   if (!ctx) return
 
   const resizeCanvas = () => {
-    if (!canvas.value) return
-    canvas.value.width = window.innerWidth
-    canvas.value.height = window.innerHeight
+    const canvasEl = canvas.value
+    if (!canvasEl) return
+    canvasEl.width = window.innerWidth
+    canvasEl.height = window.innerHeight
     // Generate stars based on viewport size
     const starCount = Math.min(
       50,
-      Math.floor((canvas.value.width * canvas.value.height) / 20000)
+      Math.floor((canvasEl.width * canvasEl.height) / 20000)
     )
     stars.value = Array.from({ length: starCount }, () => ({
-      x: Math.random() * canvas.value!.width,
-      y: Math.random() * canvas.value!.height,
+      x: Math.random() * canvasEl.width,
+      y: Math.random() * canvasEl.height,
       size: Math.random() * 2 + 0.5,
       speed: Math.random() * 0.2 + 0.1,
       opacity: Math.random() * 0.8 + 0.2,
@@ -56,9 +57,10 @@ onMounted(() => {
   }
 
   const animate = (timestamp: number) => {
-    if (!canvas.value || !ctx) return
+    const canvasEl = canvas.value
+    if (!canvasEl || !ctx) return
     // Clear the canvas
-    ctx.clearRect(0, 0, canvas.value.width, canvas.value.height)
+    ctx.clearRect(0, 0, canvasEl.width, canvasEl.height)
     // Draw each star
     stars.value.forEach((star) => {
       ctx.save()
@@ -74,8 +76,8 @@ onMounted(() => {
       if (!prefersReducedMotion.value) {
         star.x -= star.speed
         if (star.x < -10) {
-          star.x = canvas.value.width + 10
-          star.y = Math.random() * canvas.value.height
+          star.x = canvasEl.width + 10
+          star.y = Math.random() * canvasEl.height
         }
         // Subtle opacity pulse
         star.opacity += Math.sin(timestamp * 0.001 + star.x * 0.01) * 0.01
