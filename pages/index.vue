@@ -48,7 +48,12 @@
       <DeckTeaser />
       <CompatibilityTeaser />
 
-      <section ref="zodiacSectionRef" id="zodiac" class="py-24 px-4">
+      <section
+        ref="zodiacSectionRef"
+        id="zodiac"
+        class="group/zodiac py-24 px-4"
+        :data-in-view="zodiacInView ? 'true' : null"
+      >
         <div class="container mx-auto">
           <SectionHeader
             subtitle="Your Cosmic Blueprint"
@@ -59,20 +64,22 @@
           />
 
           <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            <ZodiacBadge
+            <div
               v-for="(sign, index) in zodiacSigns"
               :key="sign.name"
-              :name="sign.name"
-              :dateRange="sign.dateRange"
-              :description="sign.description"
-              class="transform-gpu translate-y-6 opacity-0 transition-all duration-700 ease-cosmic"
-              :class="{ 'translate-y-0 opacity-100': zodiacInView }"
-              :style="{ transitionDelay: getStaggerDelay(index) }"
+              class="transform-gpu opacity-0 [animation:fade-up_0.72s_var(--ease-cosmic)_forwards] [animation-delay:var(--delay)] [animation-fill-mode:forwards] [animation-play-state:paused] group-data-[in-view=true]/zodiac:[animation-play-state:running] motion-reduce:opacity-100 motion-reduce:[animation:none]"
+              :style="{ '--delay': getStaggerDelay(index) }"
             >
-              <template #icon>
-                <OrbitIcon :icon="sign.Icon" size="lg" class="mx-auto" />
-              </template>
-            </ZodiacBadge>
+              <ZodiacBadge :name="sign.name" :dateRange="sign.dateRange" :description="sign.description">
+                <template #icon>
+                  <OrbitIcon
+                    :icon="sign.Icon"
+                    size="lg"
+                    class="mx-auto transform-gpu transition-transform [transition-duration:260ms] ease-[var(--ease-cosmic)] group-hover/card:[transition-duration:150ms] group-hover/card:rotate-[12deg] group-hover/card:scale-[1.08] motion-reduce:group-hover/card:transform-none"
+                  />
+                </template>
+              </ZodiacBadge>
+            </div>
           </div>
         </div>
       </section>
@@ -173,7 +180,10 @@ const zodiacSigns = [
 
 const { target: zodiacSectionRef, isInView: zodiacInView, getStaggerDelay } = useInView({
   rootMargin: '-20% 0px',
-  threshold: 0.15,
+  threshold: 0.18,
+  groupSize: 4,
+  groupDelay: 160,
+  itemDelay: 60,
 })
 
 const parallaxElements = ref<HTMLElement[]>([])

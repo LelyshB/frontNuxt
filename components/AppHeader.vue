@@ -2,10 +2,10 @@
   <header :class="['fixed top-0 left-0 right-0 z-50 transition-all duration-300', isScrolled ? 'py-3' : 'py-4']">
     <nav class="container mx-auto px-4">
       <div
-        :class="[
-          'glass-surface glass-hover flex items-center justify-between gap-4 rounded-full px-6 py-3 transition-all duration-300 backdrop-blur-xl',
-          isScrolled ? 'shadow-glass' : ''
-        ]"
+          :class="[
+            'glass-surface glass-hover flex items-center justify-between gap-4 rounded-full px-6 py-3 transition-all duration-300 backdrop-blur-xl',
+            isScrolled ? 'shadow-glass' : ''
+          ]"
       >
         <a href="#hero" class="flex items-center gap-3 text-text-base focus-cosmic">
           <span class="sr-only">Cosmic home</span>
@@ -18,17 +18,17 @@
           <span class="font-heading text-xl font-bold">Cosmic</span>
         </a>
 
-        <div class="hidden items-center space-x-6 md:flex">
-          <a
-            v-for="item in navItems"
-            :key="item.name"
-            :href="item.href"
-            class="group relative inline-flex items-center px-4 py-2 text-sm font-medium text-text-muted transition-colors duration-300 focus-cosmic after:absolute after:left-1/2 after:-bottom-1 after:h-[2px] after:w-full after:-translate-x-1/2 after:origin-center after:scale-x-0 after:bg-gradient-to-r after:from-violet after:to-aurora-teal after:transition-transform after:duration-300 after:content-[''] group-hover:text-white group-hover:after:scale-x-100"
-            :class="{ 'text-white after:scale-x-100': activeSection === item.href }"
-            :aria-current="activeSection === item.href ? 'page' : undefined"
-            @click="handleNavSelect(item.href)"
-          >
-            {{ item.name }}
+          <div class="hidden items-center space-x-6 md:flex">
+            <a
+              v-for="item in navItems"
+              :key="item.name"
+              :href="item.href"
+              class="group relative inline-flex items-center px-4 py-2 text-sm font-medium text-text-muted transition-colors duration-300 ease-[var(--ease-cosmic)] focus-cosmic after:pointer-events-none after:absolute after:left-1/2 after:-bottom-1.5 after:h-[2px] after:w-[clamp(56px,60%,78px)] after:-translate-x-1/2 after:origin-center after:scale-x-0 after:rounded-full after:bg-gradient-to-r after:from-violet after:to-magenta after:opacity-90 after:transition-transform after:duration-250 after:ease-[var(--ease-cosmic)] after:[will-change:transform] after:[transform-origin:50%_50%] after:content-[''] group-hover:text-white group-hover:after:scale-x-100 focus-visible:after:scale-x-100 motion-reduce:after:transition-none"
+              :class="{ 'text-white after:scale-x-100': activeSection === item.href }"
+              :aria-current="activeSection === item.href ? 'page' : undefined"
+              @click="handleNavSelect(item.href)"
+            >
+              {{ item.name }}
           </a>
         </div>
 
@@ -87,7 +87,7 @@ const navItems = [
 
 const isMenuOpen = ref(false)
 const isScrolled = ref(false)
-const activeSection = ref(navItems[0]?.href ?? '#hero')
+const activeSection = ref('#hero')
 let scrollHandler: (() => void) | null = null
 let sectionObserver: IntersectionObserver | null = null
 

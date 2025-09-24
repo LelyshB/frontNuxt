@@ -1,7 +1,7 @@
 <template>
-  <div class="relative inline-flex group">
+  <div class="relative inline-flex transition-transform duration-500 ease-[var(--ease-cosmic)] group/orbit">
     <div
-      class="orbit-ring pointer-events-none absolute inset-0 rounded-full border border-violet/30"
+      class="orbit-ring pointer-events-none absolute inset-0 rounded-full border border-violet/30 opacity-80 transition-opacity duration-500 group-hover/orbit:opacity-100"
       :style="ringStyle"
     >
       <div
@@ -10,13 +10,17 @@
     </div>
 
     <div
-      class="relative flex items-center justify-center rounded-full glass-surface glass-hover transition-all duration-200 ease-cosmic transform-gpu group-hover:scale-110 group-hover:shadow-glow-violet"
+      class="relative flex items-center justify-center rounded-full glass-surface glass-hover transition-all duration-500 ease-[var(--ease-cosmic)] transform-gpu ring-1 ring-transparent group-hover/orbit:-translate-y-[1px] group-hover/orbit:scale-[1.08] group-hover/orbit:ring-[color:var(--border-hover)] group-hover/orbit:shadow-[0_18px_32px_rgba(128,90,255,0.4)] motion-reduce:transition-none motion-reduce:transform-none"
       :class="sizeClass"
     >
+      <div
+        class="pointer-events-none absolute inset-0 rounded-full opacity-0 transition-opacity duration-500 group-hover/orbit:opacity-100"
+        style="background: radial-gradient(circle at 30% 20%, hsla(var(--violet), 0.25), transparent 60%);"
+      />
       <component
         :is="icon"
         :size="iconPixelSize"
-        class="transition-colors duration-200 text-text-base group-hover:text-violet"
+        class="transition-all duration-500 ease-[var(--ease-cosmic)] text-text-base group-hover/orbit:text-violet"
       />
     </div>
   </div>

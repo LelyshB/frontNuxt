@@ -8,18 +8,19 @@
     :style="hover3d ? { transform: transformStyle } : undefined"
   >
     <div
-      class="glass-surface glass-hover relative h-full overflow-hidden rounded-2xl p-6 transition-all duration-200 ease-cosmic transform-gpu"
+      class="glass-surface glass-hover relative h-full overflow-hidden rounded-2xl p-6 shadow-[0_18px_40px_rgba(10,8,35,0.35)] transition-all duration-500 ease-[var(--ease-cosmic)] transform-gpu ring-1 ring-transparent group-hover:-translate-y-[1px] group-hover:scale-[1.01] group-hover:ring-[color:var(--border-hover)] group-focus-visible:ring-2 group-focus-visible:ring-[color:hsl(var(--violet)/0.4)] group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-bg-950 motion-reduce:transition-none motion-reduce:transform-none"
       :class="intensityClass"
     >
-      <!-- Gradient border overlay -->
       <div
-        class="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-r from-violet to-magenta opacity-0 transition-opacity duration-200 group-hover:opacity-10"
+        class="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100"
+        style="background: radial-gradient(120% 140% at 50% -20%, hsla(var(--violet), 0.22), transparent 70%);"
       />
-
-      <!-- Shimmer effect -->
+      <div
+        class="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-r from-violet/20 via-transparent to-magenta/20 opacity-0 transition-opacity duration-500 group-hover:opacity-40"
+      />
       <div class="absolute inset-0 overflow-hidden rounded-2xl">
         <div
-          class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/5 to-transparent transition-transform duration-1000 group-hover:translate-x-full"
+          class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-60 transition-transform duration-1000 ease-[var(--ease-cosmic)] group-hover:translate-x-full"
         />
       </div>
 
@@ -51,9 +52,9 @@ const transformStyle = ref('perspective(1000px) rotateX(0deg) rotateY(0deg) scal
 
 const intensityClass = computed(() => {
   const classes: Record<GlowIntensity, string> = {
-    low: 'group-hover:shadow-[0_0_28px_hsl(var(--amethyst)_/_0.2)]',
-    medium: 'group-hover:shadow-[0_0_32px_hsl(var(--amethyst)_/_0.4)]',
-    high: 'group-hover:shadow-[0_0_36px_hsl(var(--amethyst)_/_0.6)]',
+    low: 'group-hover:shadow-[0_24px_55px_rgba(10,8,35,0.45)]',
+    medium: 'group-hover:shadow-[0_30px_68px_rgba(10,8,35,0.55)]',
+    high: 'group-hover:shadow-[0_36px_80px_rgba(10,8,35,0.65)]',
   }
   return classes[props.glowIntensity]
 })
