@@ -16,15 +16,18 @@
 
       <div class="flex flex-col items-center space-y-8">
         <div
-          class="group/compat relative h-40 w-80 overflow-visible rounded-[28px] border border-white/10 bg-surface/70 p-6 shadow-[0_26px_60px_rgba(10,8,35,0.45)] transition-all duration-500 ease-[var(--ease-cosmic)] transform-gpu ring-1 ring-transparent hover:-translate-y-[4px] hover:scale-[1.01] hover:ring-[color:var(--border-hover)] hover:shadow-[0_34px_74px_rgba(10,8,35,0.6)] focus-within:ring-2 focus-within:ring-[color:hsl(var(--violet)/0.45)] focus-within:ring-offset-2 focus-within:ring-offset-bg-950 motion-reduce:hover:translate-y-0 motion-reduce:hover:scale-100"
+          class="group/compat relative h-40 w-80 overflow-visible rounded-[30px] border border-white/10 bg-[radial-gradient(160%_120%_at_50%_-20%,hsla(var(--violet)/0.18),transparent_75%)] p-[1px] shadow-[0_34px_80px_rgba(6,4,20,0.55)] transition-transform duration-500 ease-[var(--ease-cosmic)] transform-gpu hover:-translate-y-[6px] hover:scale-[1.015] focus-within:ring-2 focus-within:ring-[color:hsl(var(--violet)/0.45)] focus-within:ring-offset-2 focus-within:ring-offset-bg-950 motion-reduce:hover:translate-y-0 motion-reduce:hover:scale-100"
           @mouseenter="isPointerOver = true"
           @mouseleave="isPointerOver = false"
           @focusin="isFocusWithin = true"
           @focusout="isFocusWithin = false"
         >
+          <div
+            class="relative h-full w-full rounded-[28px] border border-white/10 bg-[radial-gradient(120%_130%_at_50%_-10%,hsla(var(--surface)/0.92),hsla(var(--surface)/0.82)_45%,hsla(var(--surface)/0.78)_82%)] p-6 transition-all duration-500 ease-[var(--ease-cosmic)] ring-1 ring-transparent before:pointer-events-none before:absolute before:-inset-[1px] before:rounded-[inherit] before:bg-[linear-gradient(135deg,hsla(var(--magenta)/0.12),hsla(var(--aurora-teal)/0.1)_58%,transparent)] before:opacity-0 before:transition-opacity before:duration-700 before:content-[''] group-hover/compat:before:opacity-100 group-focus-within/compat:before:opacity-100"
+          >
           <span
             class="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-500 ease-[var(--ease-cosmic)] group-hover/compat:opacity-100 group-focus-within/compat:opacity-100"
-            style="background: radial-gradient(130% 150% at 50% -10%, hsla(var(--violet), 0.18), transparent 78%);"
+            style="background: radial-gradient(130% 150% at 50% -10%, hsla(var(--violet), 0.2), transparent 78%);"
           />
           <span
             class="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-700 ease-[var(--ease-cosmic)] group-hover/compat:opacity-100"
@@ -80,10 +83,15 @@
           </div>
 
           <div class="absolute top-4 left-1/2 -translate-x-1/2 text-center">
-            <div class="gradient-text text-2xl font-heading font-bold drop-shadow-[0_0_18px_rgba(155,92,255,0.35)]" aria-live="polite">
+            <div
+              class="gradient-text text-3xl font-heading font-bold drop-shadow-[0_0_18px_rgba(155,92,255,0.35)] transition-transform duration-300"
+              :style="scoreTransform"
+              aria-live="polite"
+            >
               {{ displayedScore }}%
             </div>
             <div class="text-xs font-medium uppercase tracking-[0.2em] text-text-muted">Cosmic Match</div>
+          </div>
           </div>
         </div>
 
@@ -139,6 +147,10 @@ const arcPathRef = ref<SVGPathElement | null>(null)
 const arcLength = ref(0)
 const arcDashOffset = ref(0)
 const arcDashArray = computed(() => arcLength.value)
+const scoreProgress = computed(() => Math.min(displayedScore.value / targetScore, 1))
+const scoreTransform = computed(() => ({
+  transform: `translate3d(0, ${Math.round((1 - scoreProgress.value) * 14)}px, 0)`,
+}))
 let floatFrame: number | null = null
 let arcFrame: number | null = null
 let mediaQuery: MediaQueryList | null = null
@@ -204,6 +216,14 @@ const updateArcMetrics = () => {
   arcDashOffset.value = length
 }
 
+const resetArcSequence = () => {
+  stopArcAnimation()
+  updateArcMetrics()
+  arcDashOffset.value = arcLength.value
+  displayedScore.value = 0
+  arcPlayed = false
+}
+
 const playArcSequence = () => {
   if (arcPlayed) return
   updateArcMetrics()
@@ -215,12 +235,13 @@ const playArcSequence = () => {
   }
   const startOffset = arcLength.value
   const start = performance.now()
-  const duration = 1000
+  const duration = 1100
 
   const tick = (now: number) => {
     const progress = Math.min((now - start) / duration, 1)
-    arcDashOffset.value = startOffset * (1 - progress)
-    displayedScore.value = Math.round(progress * targetScore)
+    const eased = 1 - Math.pow(1 - progress, 3)
+    arcDashOffset.value = startOffset * (1 - eased)
+    displayedScore.value = Math.round(eased * targetScore)
     if (progress < 1) {
       arcFrame = requestAnimationFrame(tick)
     } else {
@@ -233,11 +254,14 @@ const playArcSequence = () => {
 }
 
 const { target: sectionRef, isInView } = useInView({
-  threshold: 0.25,
+  threshold: 0.35,
   rootMargin: '-20% 0px',
-  once: true,
+  once: false,
   onEnter: () => {
     playArcSequence()
+  },
+  onLeave: () => {
+    resetArcSequence()
   },
 })
 
@@ -261,6 +285,9 @@ watch(
       stopArcAnimation()
       arcDashOffset.value = 0
       displayedScore.value = targetScore
+    } else if (isInView.value) {
+      resetArcSequence()
+      playArcSequence()
     }
   }
 )
