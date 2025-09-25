@@ -18,17 +18,25 @@
           <span class="font-heading text-xl font-bold">Cosmic</span>
         </a>
 
-          <div class="hidden items-center space-x-6 md:flex">
-            <a
-              v-for="item in navItems"
-              :key="item.name"
-              :href="item.href"
-              class="group relative inline-flex items-center px-4 py-2 text-sm font-medium text-text-muted transition-colors duration-300 ease-[var(--ease-cosmic)] focus-cosmic after:pointer-events-none after:absolute after:left-1/2 after:-bottom-1.5 after:h-[2px] after:w-[56px] after:-translate-x-1/2 after:origin-center after:scale-x-0 after:rounded-full after:bg-gradient-to-r after:from-violet after:to-magenta after:opacity-90 after:transition-transform after:duration-300 after:ease-[var(--ease-cosmic)] after:content-[''] group-hover:text-white group-hover:after:scale-x-100"
-              :class="{ 'text-white after:scale-x-100': activeSection === item.href }"
+        <div class="hidden items-center space-x-6 md:flex">
+          <a
+            v-for="item in navItems"
+            :key="item.name"
+            :href="item.href"
+            class="group relative inline-flex items-center px-4 py-2 text-sm font-medium text-text-muted transition-colors duration-300 ease-[var(--ease-cosmic)] focus-cosmic"
             :aria-current="activeSection === item.href ? 'page' : undefined"
             @click="handleNavSelect(item.href)"
           >
-            {{ item.name }}
+            <span
+              class="relative inline-flex items-center justify-center px-1 text-current transition-colors duration-300 ease-[var(--ease-cosmic)] after:pointer-events-none after:absolute after:left-1/2 after:-bottom-2 after:h-[2.5px] after:w-[calc(100%+18px)] after:-translate-x-1/2 after:origin-center after:scale-x-0 after:rounded-full after:bg-gradient-to-r after:from-[hsl(var(--amethyst))] after:via-[hsl(var(--rose))] after:to-[hsl(var(--aurora-teal))] after:opacity-0 after:transition-[transform,opacity] after:duration-400 after:ease-[var(--ease-cosmic)] after:content-['']"
+              :class="[
+                activeSection === item.href
+                  ? 'text-transparent bg-clip-text bg-[linear-gradient(95deg,hsl(var(--amethyst)),hsl(var(--rose)))] after:scale-x-100 after:opacity-100'
+                  : 'group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-[linear-gradient(95deg,hsl(var(--amethyst)),hsl(var(--rose)))] group-hover:after:scale-x-100 group-hover:after:opacity-100'
+              ]"
+            >
+              <span class="relative z-10">{{ item.name }}</span>
+            </span>
           </a>
         </div>
 

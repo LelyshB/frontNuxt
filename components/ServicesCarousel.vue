@@ -1,128 +1,191 @@
 <template>
-  <!--
-    A simplified carousel for the services section.  It cycles
-    through three cards with a fade/scale effect and supports auto
-    progression as well as manual navigation via arrows and dots.
-  -->
-  <div class="relative w-full overflow-hidden">
-    <!-- Slides wrapper -->
-    <div class="flex transition-transform duration-500" :style="{ transform: `translateX(-${currentIndex * 100}%)` }">
-      <div
-        v-for="(service, index) in services"
-        :key="service.id"
-        class="w-full flex-shrink-0 px-4"
+  <div class="relative w-full">
+    <div class="mx-auto grid max-w-5xl gap-6 md:grid-cols-3 md:items-end">
+      <article
+        v-for="(card, index) in cards"
+        :key="card.id"
+        class="group/service relative flex h-full transform-gpu transition-all duration-500 ease-[var(--ease-cosmic)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:hsl(var(--violet)/0.45)] focus-visible:ring-offset-2 focus-visible:ring-offset-bg-950"
+        :class="getCardClasses(index)"
+        tabindex="0"
+        @mouseenter="handleEnter(index)"
+        @mouseleave="handleLeave(index)"
+        @focusin="handleEnter(index)"
+        @focusout="handleLeave(index)"
       >
         <div
-          class="glass-surface rounded-2xl p-8 text-center h-full flex flex-col items-center justify-between"
+          class="relative flex h-full w-full flex-col overflow-hidden rounded-[30px] border border-white/10 bg-[radial-gradient(160%_140%_at_50%_-30%,hsla(var(--violet)/0.18),transparent_70%)] p-[1px] shadow-[0_38px_90px_rgba(6,4,20,0.55)] transition-all duration-500 ease-[var(--ease-cosmic)] ring-1 ring-transparent before:pointer-events-none before:absolute before:inset-px before:rounded-[inherit] before:bg-[linear-gradient(125deg,hsla(var(--magenta)/0.16),hsla(var(--aurora-teal)/0.14)_60%,transparent)] before:opacity-0 before:transition-opacity before:duration-700 before:content-[''] group-hover/service:-translate-y-3 group-hover/service:scale-[1.015] group-hover/service:shadow-[0_48px_110px_rgba(6,4,20,0.7)] group-hover/service:ring-[color:var(--border-hover)] group-hover/service:before:opacity-100 motion-reduce:group-hover/service:transform-none motion-reduce:transition-none"
         >
-          <component :is="service.Icon" class="w-8 h-8 text-amethyst mb-4" />
-          <h3 class="text-lg font-semibold mb-2">{{ service.title }}</h3>
-          <p class="text-sm text-text-muted mb-4">{{ service.description }}</p>
-          <a href="#" class="inline-flex items-center text-aurora-teal hover:text-amethyst transition-colors text-sm focus-cosmic">
-            Learn more
-            <ArrowRight class="w-4 h-4 ml-1" />
-          </a>
+          <div
+            class="relative flex h-full flex-col gap-6 rounded-[28px] border border-white/10 bg-[radial-gradient(140%_140%_at_50%_-10%,hsla(var(--surface)/0.94),hsla(var(--surface)/0.85)_48%,hsla(var(--surface)/0.8)_82%)] p-8 text-left"
+          >
+            <span class="service-glint" :style="card.glint.glintAnimationStyle" />
+            <span
+              class="pointer-events-none absolute -top-20 left-1/2 h-32 w-32 -translate-x-1/2 rounded-full bg-[radial-gradient(circle,hsla(var(--violet),0.22),transparent_72%)] opacity-0 transition-opacity duration-700 ease-[var(--ease-cosmic)] group-hover/service:opacity-60 group-focus-within/service:opacity-60"
+            />
+            <div class="flex items-center justify-center">
+              <div
+                class="relative inline-flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-[radial-gradient(120%_120%_at_30%_20%,hsla(var(--violet),0.3),transparent_70%)] shadow-[0_24px_44px_rgba(70,40,140,0.35)] transition-all duration-500 ease-[var(--ease-cosmic)] group-hover/service:-translate-y-1 group-hover/service:scale-[1.08] group-hover/service:shadow-[0_34px_64px_rgba(70,40,140,0.45)] motion-reduce:group-hover/service:transform-none"
+              >
+                <div class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 ease-[var(--ease-cosmic)] group-hover/service:opacity-100" style="background: radial-gradient(circle at 65% 20%, hsla(var(--aurora-teal), 0.3), transparent 58%);" />
+                <component :is="card.Icon" class="h-7 w-7 text-white drop-shadow-[0_6px_18px_rgba(90,40,160,0.45)]" />
+              </div>
+            </div>
+            <div class="space-y-3">
+              <p class="text-xs font-semibold uppercase tracking-[0.35em] text-text-muted/70">{{ card.tagline }}</p>
+              <h3 class="font-heading text-2xl font-bold text-white drop-shadow-[0_6px_20px_rgba(90,45,155,0.35)]">{{ card.title }}</h3>
+              <p class="text-sm leading-relaxed text-text-muted">{{ card.description }}</p>
+            </div>
+            <a
+              href="#"
+              class="group/cta inline-flex items-center text-sm font-semibold transition-colors duration-300 ease-[var(--ease-cosmic)] focus-cosmic"
+            >
+              <span class="bg-[linear-gradient(90deg,hsl(var(--amethyst)),hsl(var(--rose)))] bg-clip-text text-transparent group-hover/cta:text-white">Learn more</span>
+              <ArrowRight class="ml-2 h-4 w-4 text-aurora-teal transition-transform duration-300 group-hover/cta:translate-x-1" />
+            </a>
+          </div>
         </div>
-      </div>
-    </div>
-    <!-- Navigation arrows -->
-    <button
-      class="absolute left-0 top-1/2 -translate-y-1/2 p-2 rounded-full glass-surface glass-hover focus-cosmic transform-gpu hover:scale-110"
-      @click="prevSlide"
-      aria-label="Previous slide"
-    >
-      <ChevronLeft class="w-5 h-5" />
-    </button>
-    <button
-      class="absolute right-0 top-1/2 -translate-y-1/2 p-2 rounded-full glass-surface glass-hover focus-cosmic transform-gpu hover:scale-110"
-      @click="nextSlide"
-      aria-label="Next slide"
-    >
-      <ChevronRight class="w-5 h-5" />
-    </button>
-    <!-- Dots indicator -->
-    <div class="flex justify-center space-x-2 mt-4">
-      <button
-        v-for="(s, index) in services"
-        :key="s.id"
-        @click="goToSlide(index)"
-        class="w-2 h-2 rounded-full focus-cosmic transition-all duration-200"
-        :class="index === currentIndex ? 'bg-gradient-to-r from-amethyst to-aurora-teal shadow-glow-violet scale-125' : 'bg-white/20 hover:bg-white/40'"
-        aria-label="Go to slide"
-      />
+      </article>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import {
-  Sparkles,
-  Users,
-  BookOpen,
-  ChevronLeft,
-  ChevronRight,
-  ArrowRight,
-} from 'lucide-vue-next'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { ArrowRight, BookOpen, Sparkles, Users } from 'lucide-vue-next'
+import { useGlintAnimation } from '@/composables/useGlintAnimation'
 
-interface Service {
+interface ServiceCard {
   id: string
   title: string
+  tagline: string
   description: string
   Icon: any
 }
 
-const services: Service[] = [
+const serviceData: ServiceCard[] = [
   {
-    id: '1',
+    id: 'personal',
     title: 'Personal Readings',
-    description: 'Deep insights into your cosmic blueprint',
+    tagline: 'Tailored Insight',
+    description: 'Dive deep into your cosmic blueprint with readings crafted for your unique celestial imprint.',
     Icon: Sparkles,
   },
   {
-    id: '2',
+    id: 'relationship',
     title: 'Relationship Analysis',
-    description: 'Compatibility and connection guidance',
+    tagline: 'Synastry Focus',
+    description: 'Reveal compatibility patterns and energetic chemistry to strengthen the bonds that matter most.',
     Icon: Users,
   },
   {
-    id: '3',
+    id: 'education',
     title: 'Cosmic Education',
-    description: 'Learn the ancient art of astrology',
+    tagline: 'Learn & Grow',
+    description: 'Master the language of the stars through guided lessons and immersive celestial workshops.',
     Icon: BookOpen,
   },
 ]
 
-const currentIndex = ref(1) // start from the middle card
-const isAutoPlaying = ref(true)
-let timer: number | undefined
+const cards = serviceData.map((service) => ({
+  ...service,
+  glint: useGlintAnimation({
+    duration: 1200,
+    forwardName: 'service-glint-forward',
+    reverseName: 'service-glint-reverse',
+  }),
+}))
 
-function nextSlide() {
-  goToSlide((currentIndex.value + 1) % services.length)
-}
-
-function prevSlide() {
-  goToSlide((currentIndex.value - 1 + services.length) % services.length)
-}
-
-function goToSlide(index: number) {
-  currentIndex.value = index
-  // pause auto-play for 2 seconds after manual navigation
-  isAutoPlaying.value = false
-  setTimeout(() => {
-    isAutoPlaying.value = true
-  }, 2000)
-}
+const prefersReducedMotion = ref(false)
+let mediaQuery: MediaQueryList | null = null
+let mediaListener: ((event: MediaQueryListEvent) => void) | null = null
 
 onMounted(() => {
-  timer = window.setInterval(() => {
-    if (isAutoPlaying.value) {
-      nextSlide()
+  if (typeof window === 'undefined') return
+  mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+  prefersReducedMotion.value = mediaQuery.matches
+  mediaListener = (event: MediaQueryListEvent) => {
+    prefersReducedMotion.value = event.matches
+    if (event.matches) {
+      cards.forEach((card) => card.glint.stop())
     }
-  }, 4000)
+  }
+  mediaQuery.addEventListener('change', mediaListener)
 })
 
-onUnmounted(() => {
-  if (timer) clearInterval(timer)
+onBeforeUnmount(() => {
+  if (mediaQuery && mediaListener) {
+    mediaQuery.removeEventListener('change', mediaListener)
+  }
 })
+
+function handleEnter(index: number) {
+  if (prefersReducedMotion.value) return
+  cards[index]?.glint.playForward()
+}
+
+function handleLeave(index: number) {
+  if (prefersReducedMotion.value) return
+  cards[index]?.glint.playReverse()
+}
+
+function getCardClasses(index: number) {
+  if (index === 1) {
+    return 'md:-translate-y-6 md:scale-[1.05] md:z-10'
+  }
+  if (index === 0) {
+    return 'md:translate-y-4 md:pr-4 md:opacity-95'
+  }
+  if (index === 2) {
+    return 'md:translate-y-4 md:pl-4 md:opacity-95'
+  }
+  return ''
+}
 </script>
+
+<style scoped>
+.service-glint {
+  pointer-events: none;
+  position: absolute;
+  inset: -45% -90%;
+  background: linear-gradient(110deg, transparent 25%, hsla(0, 0%, 100%, 0.58) 48%, hsla(0, 0%, 100%, 0.18) 63%, transparent 78%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transform: translate3d(-120%, 0, 0) skewX(-10deg);
+}
+
+@keyframes service-glint-forward {
+  0% {
+    opacity: 0;
+    transform: translate3d(-120%, 0, 0) skewX(-10deg);
+  }
+  35% {
+    opacity: 0.32;
+  }
+  55% {
+    opacity: 0.46;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(120%, 0, 0) skewX(-10deg);
+  }
+}
+
+@keyframes service-glint-reverse {
+  0% {
+    opacity: 0;
+    transform: translate3d(120%, 0, 0) skewX(-10deg);
+  }
+  45% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(-120%, 0, 0) skewX(-10deg);
+  }
+}
+
+.service-glint[style*='service-glint-forward'],
+.service-glint[style*='service-glint-reverse'] {
+  opacity: 1;
+}
+</style>
