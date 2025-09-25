@@ -4,9 +4,8 @@ interface UseInViewOptions {
   rootMargin?: string
   threshold?: number | number[]
   once?: boolean
-  groupSize?: number
-  groupDelay?: number
   itemDelay?: number
+  initialDelay?: number
   onEnter?: (entry: IntersectionObserverEntry & { target: HTMLElement }) => void
   onLeave?: (entry: IntersectionObserverEntry & { target: HTMLElement }) => void
 }
@@ -88,14 +87,11 @@ export function useInView(options: UseInViewOptions = {}) {
     observedElement = null
   })
 
-  const groupSize = options.groupSize ?? 4
-  const groupDelay = options.groupDelay ?? 160
-  const itemDelay = options.itemDelay ?? 60
+  const itemDelay = options.itemDelay ?? 90
+  const initialDelay = options.initialDelay ?? 0
 
   const getStaggerDelay = (index: number) => {
-    const groupIndex = Math.floor(index / groupSize)
-    const indexInGroup = index % groupSize
-    const delay = groupIndex * groupDelay + indexInGroup * itemDelay
+    const delay = initialDelay + index * itemDelay
     return `${delay}ms`
   }
 

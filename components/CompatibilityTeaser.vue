@@ -1,10 +1,5 @@
 <template>
-  <section
-    ref="sectionRef"
-    class="py-16 px-4"
-    aria-label="Compatibility Preview — Synastry Teaser"
-    :data-in-view="isInView ? 'true' : null"
-  >
+  <section class="py-16 px-4" aria-label="Compatibility Preview — Synastry Teaser">
     <div class="container mx-auto max-w-4xl">
       <SectionHeader
         subtitle="Compatibility Preview"
@@ -16,11 +11,11 @@
 
       <div class="flex flex-col items-center space-y-8">
         <div
-          class="group/compat relative h-40 w-80 overflow-visible rounded-[28px] border border-white/10 bg-surface/70 p-6 shadow-[0_26px_60px_rgba(10,8,35,0.45)] transition-all duration-500 ease-[var(--ease-cosmic)] transform-gpu ring-1 ring-transparent hover:-translate-y-[4px] hover:scale-[1.01] hover:ring-[color:var(--border-hover)] hover:shadow-[0_34px_74px_rgba(10,8,35,0.6)] focus-within:ring-2 focus-within:ring-[color:hsl(var(--violet)/0.45)] focus-within:ring-offset-2 focus-within:ring-offset-bg-950 motion-reduce:hover:translate-y-0 motion-reduce:hover:scale-100"
-          @mouseenter="isPointerOver = true"
-          @mouseleave="isPointerOver = false"
-          @focusin="isFocusWithin = true"
-          @focusout="isFocusWithin = false"
+          class="group/compat relative h-40 w-80 overflow-visible rounded-[28px] border border-white/10 bg-surface/70 p-6 shadow-[0_26px_60px_rgba(10,8,35,0.45)] transition-all duration-500 ease-[var(--ease-cosmic)] transform-gpu ring-1 ring-transparent hover:-translate-y-[4px] hover:scale-[1.01] hover:ring-[color:var(--border-hover)] hover:shadow-[0_34px_74px_rgba(10,8,35,0.6)] focus-within:ring-2 focus-within:ring-[color:hsl(var(--violet)/0.45)] focus-within:ring-offset-2 focus-within:ring-offset-bg-950 motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:hover:scale-100"
+          @mouseenter="handlePointerEnter"
+          @mouseleave="handlePointerLeave"
+          @focusin="handleFocusIn"
+          @focusout="handleFocusOut"
         >
           <span
             class="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-500 ease-[var(--ease-cosmic)] group-hover/compat:opacity-100 group-focus-within/compat:opacity-100"
@@ -39,23 +34,21 @@
               </linearGradient>
             </defs>
             <path
-              ref="arcPathRef"
               d="M 60 140 Q 160 20 260 140"
               :stroke="`url(#${gradientId})`"
               stroke-width="3"
               fill="none"
-              :stroke-dasharray="arcDashArray"
-              :stroke-dashoffset="arcDashOffset"
               class="transition-[filter] duration-500 ease-[var(--ease-cosmic)] group-hover/compat:[filter:drop-shadow(0_0_22px_hsl(var(--aurora-teal)/0.55))]"
             />
             <circle
-              v-for="(particle, index) in particles"
+              v-for="(particle, index) in arcParticles"
               :key="index"
               :cx="particle.cx"
               :cy="particle.cy"
               :r="particle.r"
               :fill="particle.fill"
               :opacity="particle.opacity"
+              class="transition-opacity duration-500 ease-[var(--ease-cosmic)] group-hover/compat:opacity-100"
             />
           </svg>
 
@@ -80,9 +73,7 @@
           </div>
 
           <div class="absolute top-4 left-1/2 -translate-x-1/2 text-center">
-            <div class="gradient-text text-2xl font-heading font-bold drop-shadow-[0_0_18px_rgba(155,92,255,0.35)]" aria-live="polite">
-              {{ displayedScore }}%
-            </div>
+            <div class="gradient-text text-2xl font-heading font-bold drop-shadow-[0_0_18px_rgba(155,92,255,0.35)]">{{ score }}%</div>
             <div class="text-xs font-medium uppercase tracking-[0.2em] text-text-muted">Cosmic Match</div>
           </div>
         </div>
@@ -122,38 +113,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import SectionHeader from '@/components/SectionHeader.vue'
-import { useInView } from '@/composables/useInView'
 
 const birth1 = ref('')
 const birth2 = ref('')
-const displayedScore = ref(0)
-const targetScore = 87
+const score = 87
+const gradientId = 'compat-arc-gradient'
+
 const isPointerOver = ref(false)
 const isFocusWithin = ref(false)
 const floatY = ref(0)
-const reduced = ref(false)
-const gradientId = `arc-gradient-${Math.random().toString(36).slice(2, 9)}`
-const arcPathRef = ref<SVGPathElement | null>(null)
-const arcLength = ref(0)
-const arcDashOffset = ref(0)
-const arcDashArray = computed(() => arcLength.value)
-let floatFrame: number | null = null
-let arcFrame: number | null = null
-let mediaQuery: MediaQueryList | null = null
-let mediaQueryListener: ((event: MediaQueryListEvent) => void) | null = null
-let arcPlayed = false
-
-const particles = [
-  { cx: 120, cy: 80, r: 2, fill: 'hsl(var(--amethyst))', opacity: 0.6 },
-  { cx: 160, cy: 40, r: 1.5, fill: 'hsl(200 95% 70%)', opacity: 0.8 },
-  { cx: 200, cy: 60, r: 2.5, fill: 'hsl(var(--aurora-teal))', opacity: 0.5 },
-]
+const prefersReducedMotion = ref(false)
 
 const isInteractive = computed(() => isPointerOver.value || isFocusWithin.value)
-const paused = computed(() => isInteractive.value)
-
 const orbGlow = computed(() => (isInteractive.value ? 0.55 : 0.35))
 
 const leftOrbStyle = computed(() => ({
@@ -166,85 +139,45 @@ const rightOrbStyle = computed(() => ({
   boxShadow: `0 0 26px hsl(var(--aurora-teal) / ${orbGlow.value})`,
 }))
 
-const stopFloatAnimation = () => {
-  if (floatFrame !== null && typeof window !== 'undefined') {
+const arcParticles = [
+  { cx: 120, cy: 80, r: 2, fill: 'hsl(var(--amethyst))', opacity: 0.6 },
+  { cx: 160, cy: 40, r: 1.5, fill: 'hsl(200 95% 70%)', opacity: 0.8 },
+  { cx: 200, cy: 60, r: 2.5, fill: 'hsl(var(--aurora-teal))', opacity: 0.5 },
+]
+
+let floatFrame = 0
+let mediaQuery: MediaQueryList | null = null
+let mediaQueryListener: ((event: MediaQueryListEvent) => void) | null = null
+
+function floatStep(timestamp: number) {
+  if (prefersReducedMotion.value || isInteractive.value) {
+    floatFrame = 0
+    floatY.value = 0
+    return
+  }
+  floatY.value = Math.sin(timestamp * 0.002) * 6
+  floatFrame = requestAnimationFrame(floatStep)
+}
+
+function startFloatAnimation() {
+  if (typeof window === 'undefined') return
+  if (prefersReducedMotion.value || isInteractive.value || floatFrame) return
+  floatFrame = requestAnimationFrame(floatStep)
+}
+
+function stopFloatAnimation() {
+  if (typeof window === 'undefined') return
+  if (floatFrame) {
     cancelAnimationFrame(floatFrame)
-    floatFrame = null
+    floatFrame = 0
   }
   floatY.value = 0
 }
 
-const floatStep = () => {
-  if (typeof window === 'undefined') return
-  const now = performance.now()
-  floatY.value = Math.sin(now * 0.002) * 6
-  floatFrame = requestAnimationFrame(floatStep)
-}
-
-const startFloatAnimation = () => {
-  if (reduced.value || paused.value || floatFrame !== null || typeof window === 'undefined') {
-    return
-  }
-  floatFrame = requestAnimationFrame(floatStep)
-}
-
-const stopArcAnimation = () => {
-  if (arcFrame !== null && typeof window !== 'undefined') {
-    cancelAnimationFrame(arcFrame)
-    arcFrame = null
-  }
-}
-
-const updateArcMetrics = () => {
-  if (typeof window === 'undefined') return
-  const path = arcPathRef.value
-  if (!path) return
-  const length = path.getTotalLength()
-  arcLength.value = length
-  arcDashOffset.value = length
-}
-
-const playArcSequence = () => {
-  if (arcPlayed) return
-  updateArcMetrics()
-  arcPlayed = true
-  if (reduced.value || typeof window === 'undefined') {
-    arcDashOffset.value = 0
-    displayedScore.value = targetScore
-    return
-  }
-  const startOffset = arcLength.value
-  const start = performance.now()
-  const duration = 1000
-
-  const tick = (now: number) => {
-    const progress = Math.min((now - start) / duration, 1)
-    arcDashOffset.value = startOffset * (1 - progress)
-    displayedScore.value = Math.round(progress * targetScore)
-    if (progress < 1) {
-      arcFrame = requestAnimationFrame(tick)
-    } else {
-      arcFrame = null
-      displayedScore.value = targetScore
-    }
-  }
-
-  arcFrame = requestAnimationFrame(tick)
-}
-
-const { target: sectionRef, isInView } = useInView({
-  threshold: 0.25,
-  rootMargin: '-20% 0px',
-  once: true,
-  onEnter: () => {
-    playArcSequence()
-  },
-})
-
 watch(
-  () => [paused.value, reduced.value],
-  ([isPaused, isReduced]) => {
-    if (isPaused || isReduced) {
+  () => [prefersReducedMotion.value, isInteractive.value] as const,
+  ([reduced, interactive]) => {
+    if (reduced || interactive) {
       stopFloatAnimation()
     } else {
       startFloatAnimation()
@@ -253,41 +186,42 @@ watch(
   { immediate: true }
 )
 
-watch(
-  () => reduced.value,
-  (value) => {
-    if (value) {
-      stopFloatAnimation()
-      stopArcAnimation()
-      arcDashOffset.value = 0
-      displayedScore.value = targetScore
-    }
-  }
-)
+function handlePointerEnter() {
+  isPointerOver.value = true
+}
+
+function handlePointerLeave() {
+  isPointerOver.value = false
+}
+
+function handleFocusIn() {
+  isFocusWithin.value = true
+}
+
+function handleFocusOut() {
+  isFocusWithin.value = false
+}
 
 onMounted(() => {
   if (typeof window === 'undefined') return
   mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-  reduced.value = mediaQuery.matches
+  prefersReducedMotion.value = mediaQuery.matches
   mediaQueryListener = (event: MediaQueryListEvent) => {
-    reduced.value = event.matches
-    if (!event.matches && isInView.value && !arcPlayed) {
-      playArcSequence()
+    prefersReducedMotion.value = event.matches
+    if (event.matches) {
+      stopFloatAnimation()
+    } else {
+      startFloatAnimation()
     }
   }
   mediaQuery.addEventListener('change', mediaQueryListener)
-  nextTick(() => {
-    updateArcMetrics()
-    if (isInView.value) {
-      playArcSequence()
-    }
-  })
-  startFloatAnimation()
+  if (!mediaQuery.matches) {
+    startFloatAnimation()
+  }
 })
 
 onBeforeUnmount(() => {
   stopFloatAnimation()
-  stopArcAnimation()
   if (mediaQuery && mediaQueryListener) {
     mediaQuery.removeEventListener('change', mediaQueryListener)
   }

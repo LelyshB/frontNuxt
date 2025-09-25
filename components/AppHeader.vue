@@ -23,8 +23,8 @@
               v-for="item in navItems"
               :key="item.name"
               :href="item.href"
-              class="group relative inline-flex items-center px-4 py-2 text-sm font-medium text-text-muted transition-colors duration-300 ease-[var(--ease-cosmic)] focus-cosmic after:pointer-events-none after:absolute after:left-1/2 after:-bottom-1.5 after:h-[2px] after:w-[56px] after:-translate-x-1/2 after:origin-center after:scale-x-0 after:rounded-full after:bg-gradient-to-r after:from-violet after:to-magenta after:opacity-90 after:transition-transform after:duration-300 after:ease-[var(--ease-cosmic)] after:content-[''] group-hover:text-white group-hover:after:scale-x-100"
-              :class="{ 'text-white after:scale-x-100': activeSection === item.href }"
+              class="group relative inline-flex items-center px-4 py-2 text-sm font-medium text-text-muted transition-colors duration-300 ease-[var(--ease-cosmic)] focus-cosmic after:pointer-events-none after:absolute after:-bottom-1.5 after:h-[2px] after:w-0 after:left-1/2 after:-translate-x-1/2 after:rounded-full after:bg-gradient-to-r after:from-violet after:to-magenta after:opacity-90 after:transition-all after:duration-300 after:ease-[var(--ease-cosmic)] after:content-[''] motion-reduce:after:transition-none hover:text-white focus-visible:text-white group-hover:after:left-0 group-hover:after:w-full group-hover:after:translate-x-0 focus-visible:after:left-0 focus-visible:after:w-full focus-visible:after:translate-x-0"
+              :class="{ 'text-white after:left-0 after:w-full after:translate-x-0': activeSection === item.href }"
             :aria-current="activeSection === item.href ? 'page' : undefined"
             @click="handleNavSelect(item.href)"
           >
