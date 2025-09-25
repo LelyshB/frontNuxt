@@ -18,17 +18,28 @@
           <span class="font-heading text-xl font-bold">Cosmic</span>
         </a>
 
-          <div class="hidden items-center space-x-6 md:flex">
-            <a
-              v-for="item in navItems"
-              :key="item.name"
-              :href="item.href"
-              class="group relative inline-flex items-center px-4 py-2 text-sm font-medium text-text-muted transition-colors duration-300 ease-[var(--ease-cosmic)] focus-cosmic after:pointer-events-none after:absolute after:left-1/2 after:-bottom-1.5 after:h-[2px] after:w-[56px] after:-translate-x-1/2 after:origin-center after:scale-x-0 after:rounded-full after:bg-gradient-to-r after:from-violet after:to-magenta after:opacity-90 after:transition-transform after:duration-300 after:ease-[var(--ease-cosmic)] after:content-[''] group-hover:text-white group-hover:after:scale-x-100"
-              :class="{ 'text-white after:scale-x-100': activeSection === item.href }"
+        <div class="hidden items-center space-x-6 md:flex">
+          <a
+            v-for="item in navItems"
+            :key="item.name"
+            :href="item.href"
+            class="group relative inline-flex items-center px-4 py-2 text-sm font-medium text-text-muted transition-colors duration-300 ease-[var(--ease-cosmic)] focus-cosmic motion-reduce:transition-none group-hover:text-white"
+            :class="{ 'text-white': activeSection === item.href }"
             :aria-current="activeSection === item.href ? 'page' : undefined"
             @click="handleNavSelect(item.href)"
           >
-            {{ item.name }}
+            <span class="relative z-10">{{ item.name }}</span>
+            <span
+              aria-hidden="true"
+              class="pointer-events-none absolute left-1/2 bottom-0 flex -translate-x-1/2 items-center justify-center transform-gpu transition-all duration-300 ease-[var(--ease-cosmic)] motion-reduce:transition-none group-hover:scale-x-100 group-hover:opacity-100"
+              :class="[
+                'h-2 w-[calc(100%+1.5rem)] origin-center scale-x-0 opacity-0',
+                activeSection === item.href ? 'scale-x-100 opacity-100' : ''
+              ]"
+            >
+              <span class="absolute inset-0 -z-10 rounded-full bg-gradient-to-r from-violet/40 via-magenta/40 to-mint/40 blur-md" />
+              <span class="h-full w-full rounded-full bg-gradient-to-r from-violet via-magenta to-mint" />
+            </span>
           </a>
         </div>
 

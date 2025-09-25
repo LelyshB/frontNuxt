@@ -17,6 +17,12 @@ function isElementEntry(
   return entry.target instanceof HTMLElement
 }
 
+export const STAGGER_DEFAULTS = {
+  groupSize: 4,
+  itemDelay: 110,
+  rowDelay: 200,
+} as const
+
 export function useInView(options: UseInViewOptions = {}) {
   const target = ref<HTMLElement | null>(null)
   const isInView = ref(false)
@@ -88,14 +94,15 @@ export function useInView(options: UseInViewOptions = {}) {
     observedElement = null
   })
 
-  const groupSize = options.groupSize ?? 4
-  const groupDelay = options.groupDelay ?? 160
-  const itemDelay = options.itemDelay ?? 60
+  const groupSize = options.groupSize ?? STAGGER_DEFAULTS.groupSize
+  const itemDelay = options.itemDelay ?? STAGGER_DEFAULTS.itemDelay
+  const rowDelay = options.groupDelay ?? STAGGER_DEFAULTS.rowDelay
+  const rowDuration = Math.max(groupSize - 1, 0) * itemDelay
 
   const getStaggerDelay = (index: number) => {
     const groupIndex = Math.floor(index / groupSize)
     const indexInGroup = index % groupSize
-    const delay = groupIndex * groupDelay + indexInGroup * itemDelay
+    const delay = groupIndex * (rowDuration + rowDelay) + indexInGroup * itemDelay
     return `${delay}ms`
   }
 

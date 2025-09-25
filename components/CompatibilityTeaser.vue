@@ -43,6 +43,7 @@
               d="M 60 140 Q 160 20 260 140"
               :stroke="`url(#${gradientId})`"
               stroke-width="3"
+              stroke-linecap="round"
               fill="none"
               :stroke-dasharray="arcDashArray"
               :stroke-dashoffset="arcDashOffset"
@@ -130,6 +131,9 @@ const birth1 = ref('')
 const birth2 = ref('')
 const displayedScore = ref(0)
 const targetScore = 87
+const arcDuration = 1020
+
+const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3)
 const isPointerOver = ref(false)
 const isFocusWithin = ref(false)
 const floatY = ref(0)
@@ -201,26 +205,31 @@ const updateArcMetrics = () => {
   if (!path) return
   const length = path.getTotalLength()
   arcLength.value = length
-  arcDashOffset.value = length
+  if (!arcPlayed) {
+    arcDashOffset.value = length
+  } else if (arcFrame === null) {
+    arcDashOffset.value = 0
+  }
 }
 
 const playArcSequence = () => {
   if (arcPlayed) return
   updateArcMetrics()
-  arcPlayed = true
   if (reduced.value || typeof window === 'undefined') {
     arcDashOffset.value = 0
     displayedScore.value = targetScore
     return
   }
+  arcPlayed = true
   const startOffset = arcLength.value
+  displayedScore.value = 0
   const start = performance.now()
-  const duration = 1000
 
   const tick = (now: number) => {
-    const progress = Math.min((now - start) / duration, 1)
-    arcDashOffset.value = startOffset * (1 - progress)
-    displayedScore.value = Math.round(progress * targetScore)
+    const progress = Math.min((now - start) / arcDuration, 1)
+    const eased = easeOutCubic(progress)
+    arcDashOffset.value = startOffset * (1 - eased)
+    displayedScore.value = Math.round(eased * targetScore)
     if (progress < 1) {
       arcFrame = requestAnimationFrame(tick)
     } else {
@@ -276,6 +285,7 @@ onMounted(() => {
     }
   }
   mediaQuery.addEventListener('change', mediaQueryListener)
+  window.addEventListener('resize', updateArcMetrics, { passive: true })
   nextTick(() => {
     updateArcMetrics()
     if (isInView.value) {
@@ -290,6 +300,9 @@ onBeforeUnmount(() => {
   stopArcAnimation()
   if (mediaQuery && mediaQueryListener) {
     mediaQuery.removeEventListener('change', mediaQueryListener)
+  }
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('resize', updateArcMetrics)
   }
 })
 </script>

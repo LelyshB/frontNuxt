@@ -182,8 +182,6 @@ const { target: zodiacSectionRef, isInView: zodiacInView, getStaggerDelay } = us
   rootMargin: '-20% 0px',
   threshold: 0.18,
   groupSize: 4,
-  groupDelay: 160,
-  itemDelay: 60,
 })
 
 const parallaxElements = ref<HTMLElement[]>([])
