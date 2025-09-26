@@ -69,20 +69,17 @@
               class="opacity-0 motion-reduce:opacity-100"
               :style="{ animationFillMode: 'forwards' }"
             >
-              <div class="flex flex-col items-center gap-5 text-center">
-                <div
-                  class="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-transparent shadow-[0_16px_40px_rgba(128,90,255,0.28)] transition-transform duration-500 ease-[var(--ease-cosmic)] group-hover:rotate-[10deg] group-hover:scale-110 motion-reduce:transform-none"
-                >
-                  <OrbitIcon
-                    :icon="sign.Icon"
-                    size="lg"
-                    class="text-violet transition-transform duration-500 group-hover:scale-105"
+              <div class="flex h-full flex-col items-center gap-6 text-center">
+                <div class="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-violet via-magenta to-magenta/80 text-white shadow-[0_20px_45px_rgba(147,51,234,0.35)] transition-transform duration-500 ease-[var(--ease-cosmic)] group-hover:rotate-[8deg] group-hover:scale-110 motion-reduce:transform-none">
+                  <component
+                    :is="sign.Icon"
+                    class="h-9 w-9 transition-transform duration-500 group-hover:scale-110"
                   />
-                  <span class="pointer-events-none absolute inset-0 bg-gradient-to-br from-violet/30 via-transparent to-magenta/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                  <span class="pointer-events-none absolute inset-0 bg-gradient-to-r from-white/10 via-transparent to-white/30 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                 </div>
-                <div class="space-y-2">
+                <div class="space-y-3">
                   <h3 class="font-heading text-xl font-semibold text-text-base">{{ sign.name }}</h3>
-                  <p class="text-xs font-medium uppercase tracking-[0.4em] text-text-muted/70">{{ sign.dateRange }}</p>
+                  <p class="text-xs font-semibold uppercase tracking-[0.4em] text-text-muted/60">{{ sign.dateRange }}</p>
                   <p class="text-sm leading-relaxed text-text-muted">{{ sign.description }}</p>
                 </div>
               </div>
@@ -163,7 +160,6 @@ import CompatibilityTeaser from '@/components/CompatibilityTeaser.vue'
 import DeckTeaser from '@/components/DeckTeaser.vue'
 import GlowCard from '@/components/GlowCard.vue'
 import CardGloss from '@/components/CardGloss.vue'
-import OrbitIcon from '@/components/OrbitIcon.vue'
 import SectionHeader from '@/components/SectionHeader.vue'
 import ServicesCarousel from '@/components/ServicesCarousel.vue'
 import StarfieldCanvas from '@/components/StarfieldCanvas.vue'

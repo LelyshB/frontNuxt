@@ -1,35 +1,19 @@
 <script setup lang="ts">
-const onEnter = (e: MouseEvent) => {
-  const target = e.currentTarget as HTMLElement | null
-  if (!target) return
-  if (typeof window === 'undefined') return
-  if (!window.matchMedia('(prefers-reduced-motion: no-preference)').matches) return
-  const rect = target.getBoundingClientRect()
-  const x = (e.clientX - rect.left - rect.width / 2) / rect.width
-  const y = (e.clientY - rect.top - rect.height / 2) / rect.height
-  target.style.transform = `perspective(1000px) rotateX(${-y * 4}deg) rotateY(${x * 4}deg) scale(1.02)`
-}
+import { useAttrs } from 'vue'
+import GlowCard from '@/components/GlowCard.vue'
 
-const onLeave = (e: MouseEvent) => {
-  const target = e.currentTarget as HTMLElement | null
-  if (!target) return
-  if (typeof window === 'undefined') return
-  if (!window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
-    target.style.transform = 'none'
-    return
-  }
-  target.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)'
-}
+defineOptions({ inheritAttrs: false })
+
+const attrs = useAttrs()
 </script>
 
 <template>
-  <div
-    class="group cursor-pointer transform-gpu transition-transform duration-200 ease-out motion-reduce:transform-none"
-    @mouseenter="onEnter"
-    @mouseleave="onLeave"
+  <GlowCard
+    v-bind="attrs"
+    hover3d
+    glowIntensity="high"
+    class="w-full"
   >
-    <div class="glass-surface gloss p-6">
-      <slot />
-    </div>
-  </div>
+    <slot />
+  </GlowCard>
 </template>

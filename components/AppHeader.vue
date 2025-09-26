@@ -22,7 +22,7 @@
           <NuxtLink
             v-for="item in navItems"
             :key="item.name"
-            class="relative group px-4 py-2 text-sm font-medium text-text-muted transition-colors duration-200 focus-cosmic hover:text-text-base"
+            class="relative group px-4 py-2 text-sm font-medium text-text-muted transition-colors duration-300 ease-[var(--ease-cosmic)] hover:text-text-base focus-cosmic"
             :class="{ 'text-text-base': activeSection === item.href }"
             :to="item.href"
             :aria-current="activeSection === item.href ? 'page' : undefined"
@@ -30,8 +30,8 @@
           >
             <span>{{ item.name }}</span>
             <span
-              class="pointer-events-none absolute -bottom-0.5 left-1/2 h-[2px] w-0 origin-center bg-gradient-to-r from-violet to-magenta transition-all duration-300 group-hover:left-0 group-hover:w-full shadow-[0_0_10px_rgba(168,85,247,0.5)]"
-              :class="{ 'left-0 w-full': activeSection === item.href }"
+              class="pointer-events-none absolute -bottom-0.5 left-1/2 h-[2px] w-full -translate-x-1/2 origin-center scale-x-0 rounded-full bg-gradient-to-r from-violet via-magenta to-magenta opacity-0 shadow-[0_0_10px_rgba(168,85,247,0.5)] transition duration-300 ease-[var(--ease-cosmic)] group-hover:scale-x-100 group-hover:opacity-100 group-focus-visible:scale-x-100 group-focus-visible:opacity-100"
+              :class="{ 'scale-x-100 opacity-100': activeSection === item.href }"
             />
           </NuxtLink>
         </div>
