@@ -18,18 +18,22 @@
           <span class="font-heading text-xl font-bold">Cosmic</span>
         </a>
 
-          <div class="hidden items-center space-x-6 md:flex">
-            <a
-              v-for="item in navItems"
-              :key="item.name"
-              :href="item.href"
-              class="group relative inline-flex items-center px-4 py-2 text-sm font-medium text-text-muted transition-colors duration-300 ease-[var(--ease-cosmic)] focus-cosmic after:pointer-events-none after:absolute after:left-1/2 after:-bottom-1.5 after:h-[2px] after:w-[56px] after:-translate-x-1/2 after:origin-center after:scale-x-0 after:rounded-full after:bg-gradient-to-r after:from-violet after:to-magenta after:opacity-90 after:transition-transform after:duration-300 after:ease-[var(--ease-cosmic)] after:content-[''] group-hover:text-white group-hover:after:scale-x-100"
-              :class="{ 'text-white after:scale-x-100': activeSection === item.href }"
+        <div class="hidden items-center space-x-6 md:flex">
+          <NuxtLink
+            v-for="item in navItems"
+            :key="item.name"
+            class="relative group px-4 py-2 text-sm font-medium text-text-muted transition-colors duration-200 focus-cosmic hover:text-text-base"
+            :class="{ 'text-text-base': activeSection === item.href }"
+            :to="item.href"
             :aria-current="activeSection === item.href ? 'page' : undefined"
             @click="handleNavSelect(item.href)"
           >
-            {{ item.name }}
-          </a>
+            <span>{{ item.name }}</span>
+            <span
+              class="pointer-events-none absolute -bottom-0.5 left-1/2 h-[2px] w-0 origin-center bg-gradient-to-r from-violet to-magenta transition-all duration-300 group-hover:left-0 group-hover:w-full shadow-[0_0_10px_rgba(168,85,247,0.5)]"
+              :class="{ 'left-0 w-full': activeSection === item.href }"
+            />
+          </NuxtLink>
         </div>
 
         <div class="hidden md:block">
