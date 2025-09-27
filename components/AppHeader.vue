@@ -1,12 +1,7 @@
 <template>
-  <header :class="['fixed top-0 left-0 right-0 z-50 transition-all duration-300', isScrolled ? 'py-3' : 'py-4']">
+  <header :class="headerClasses">
     <nav class="container mx-auto px-4">
-      <div
-        :class="[
-          'glass-surface glass-hover flex items-center justify-between gap-4 rounded-full px-6 py-3 transition-all duration-300 backdrop-blur-xl',
-          isScrolled ? 'shadow-glass' : ''
-        ]"
-      >
+      <div :class="pillClasses">
         <a href="#hero" class="flex items-center gap-3 text-text-base focus-cosmic">
           <span class="sr-only">Cosmic home</span>
           <div class="relative flex h-10 w-10 items-center justify-center">
@@ -22,7 +17,7 @@
           <NuxtLink
             v-for="item in navItems"
             :key="item.name"
-            class="relative group px-4 py-2 text-sm font-medium text-text-muted transition-colors duration-300 ease-[var(--ease-cosmic)] hover:text-text-base focus-cosmic"
+            class="group relative px-4 py-2 text-sm font-medium text-text-muted transition-colors duration-300 ease-[var(--ease-cosmic)] hover:text-text-base focus-cosmic"
             :class="{ 'text-text-base': activeSection === item.href }"
             :to="item.href"
             :aria-current="activeSection === item.href ? 'page' : undefined"
@@ -79,7 +74,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { Menu as MenuIcon, Star, X as XIcon } from 'lucide-vue-next'
 
 const navItems = [
@@ -91,12 +86,24 @@ const navItems = [
 
 const isMenuOpen = ref(false)
 const isScrolled = ref(false)
-const activeSection = ref(navItems[0]?.href ?? '#hero')
-let scrollHandler: (() => void) | null = null
+const activeSection = ref<string | null>(null)
+let scrollHandler: ((this: Window, ev: Event) => void) | null = null
 let sectionObserver: IntersectionObserver | null = null
 
+const headerClasses = computed(() => [
+  'fixed inset-x-0 top-0 z-50 transition-[padding] duration-300 ease-[var(--ease-cosmic)]',
+  isScrolled.value ? 'py-3' : 'py-5',
+])
+
+const pillClasses = computed(() => [
+  'glass-hover flex items-center justify-between gap-4 rounded-full border border-white/10 px-6 transition-[padding,box-shadow,background-color,filter,ring-color] duration-300 ease-[var(--ease-cosmic)] backdrop-blur-xl supports-[backdrop-filter:none]:backdrop-blur-0 supports-[backdrop-filter:none]:bg-[color:hsl(var(--surface)/0.88)] ring-1 ring-transparent',
+  isScrolled.value
+    ? 'bg-[color:hsl(var(--surface)/0.72)] py-2 shadow-glass ring-white/5'
+    : 'bg-[color:hsl(var(--surface)/0.55)] py-4 shadow-none ring-transparent',
+])
+
 function isSectionEntry(
-  entry: IntersectionObserverEntry
+  entry: IntersectionObserverEntry,
 ): entry is IntersectionObserverEntry & { target: HTMLElement } {
   return entry.target instanceof HTMLElement
 }
@@ -117,11 +124,17 @@ function handleNavSelect(href: string) {
 onMounted(() => {
   if (typeof window === 'undefined') return
 
-  scrollHandler = () => {
+  const onScroll = () => {
     isScrolled.value = window.scrollY > 20
   }
-  window.addEventListener('scroll', scrollHandler)
-  scrollHandler()
+  scrollHandler = onScroll
+  window.addEventListener('scroll', onScroll, { passive: true })
+  onScroll()
+
+  const initialHash = window.location.hash
+  if (initialHash && navItems.some((item) => item.href === initialHash)) {
+    activeSection.value = initialHash
+  }
 
   const sections = navItems
     .map((item) => {
@@ -137,14 +150,17 @@ onMounted(() => {
           .filter(isSectionEntry)
           .filter((entry) => entry.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
+
         if (visible.length > 0) {
           const [topEntry] = visible
           if (topEntry) {
             activeSection.value = `#${topEntry.target.id}`
           }
+        } else if (window.scrollY <= 20) {
+          activeSection.value = null
         }
       },
-      { rootMargin: '-45% 0px -45% 0px', threshold: [0.2, 0.4, 0.6] }
+      { rootMargin: '-45% 0px -45% 0px', threshold: [0.2, 0.4, 0.6] },
     )
     sections.forEach((section) => sectionObserver?.observe(section))
   }

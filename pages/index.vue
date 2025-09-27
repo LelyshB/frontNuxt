@@ -61,26 +61,26 @@
             titleGradient
           />
 
-          <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <CardGloss
               v-for="sign in zodiacSigns"
               :key="sign.name"
               data-reveal
-              class="opacity-0 motion-reduce:opacity-100"
+              class="opacity-0 motion-reduce:opacity-100 [&>div]:p-5 [&>div]:lg:p-6"
               :style="{ animationFillMode: 'forwards' }"
             >
-              <div class="flex h-full flex-col items-center gap-6 text-center">
-                <div class="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-violet via-magenta to-magenta/80 text-white shadow-[0_20px_45px_rgba(147,51,234,0.35)] transition-transform duration-500 ease-[var(--ease-cosmic)] group-hover:rotate-[8deg] group-hover:scale-110 motion-reduce:transform-none">
+              <div class="flex h-full flex-col items-center gap-5 text-center">
+                <div class="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-violet via-magenta to-magenta/80 text-white shadow-[0_18px_38px_rgba(147,51,234,0.28)] transition-transform duration-500 ease-[var(--ease-cosmic)] group-hover:rotate-[8deg] group-hover:scale-110 motion-reduce:transform-none">
                   <component
                     :is="sign.Icon"
-                    class="h-9 w-9 transition-transform duration-500 group-hover:scale-110"
+                    class="h-7 w-7 transition-transform duration-500 group-hover:scale-110"
                   />
                   <span class="pointer-events-none absolute inset-0 bg-gradient-to-r from-white/10 via-transparent to-white/30 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                 </div>
-                <div class="space-y-3">
-                  <h3 class="font-heading text-xl font-semibold text-text-base">{{ sign.name }}</h3>
-                  <p class="text-xs font-semibold uppercase tracking-[0.4em] text-text-muted/60">{{ sign.dateRange }}</p>
-                  <p class="text-sm leading-relaxed text-text-muted">{{ sign.description }}</p>
+                <div class="space-y-2.5">
+                  <h3 class="font-heading text-lg font-semibold text-text-base">{{ sign.name }}</h3>
+                  <p class="text-[0.7rem] font-semibold uppercase tracking-[0.38em] text-text-muted/60">{{ sign.dateRange }}</p>
+                  <p class="text-sm leading-relaxed text-text-muted/90">{{ sign.description }}</p>
                 </div>
               </div>
             </CardGloss>
