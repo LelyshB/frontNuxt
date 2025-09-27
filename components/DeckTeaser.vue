@@ -1,5 +1,9 @@
 <template>
-  <section id="readings" class="py-16 px-4" aria-label="Tarot Preview — Deck Teaser">
+  <section
+    id="readings"
+    class="py-16 px-4 scroll-mt-[calc(var(--header-height,0px)+1.5rem)]"
+    aria-label="Tarot Preview — Deck Teaser"
+  >
     <div class="container mx-auto max-w-5xl">
       <SectionHeader
         subtitle="Tarot Preview"

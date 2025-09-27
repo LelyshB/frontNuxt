@@ -10,8 +10,11 @@
 
     <AppHeader class="relative z-20" />
 
-    <main class="relative z-10">
-      <section id="hero" class="flex min-h-screen items-center justify-center px-4 pt-24">
+    <main class="relative z-10 pt-[var(--header-height,0px)]">
+      <section
+        id="hero"
+        class="grid min-h-[calc(100dvh-var(--header-height,0px))] place-items-center px-4 scroll-mt-[calc(var(--header-height,0px)+1.5rem)]"
+      >
         <div class="container mx-auto max-w-4xl text-center">
           <div class="space-y-8" data-parallax="0.6">
             <div class="space-y-4">
@@ -50,7 +53,7 @@
 
       <section
         id="zodiac"
-        class="py-24 px-4"
+        class="py-24 px-4 scroll-mt-[calc(var(--header-height,0px)+1.5rem)]"
       >
         <div class="container mx-auto">
           <SectionHeader
@@ -88,7 +91,7 @@
         </div>
       </section>
 
-      <section id="services" class="py-24 px-4">
+      <section id="services" class="py-24 px-4 scroll-mt-[calc(var(--header-height,0px)+1.5rem)]">
         <div class="container mx-auto">
           <SectionHeader
             subtitle="Cosmic Services"
@@ -100,7 +103,7 @@
         </div>
       </section>
 
-      <section id="cta" class="py-24 px-4">
+      <section id="cta" class="py-24 px-4 scroll-mt-[calc(var(--header-height,0px)+1.5rem)]">
         <div class="container mx-auto text-center">
           <GlowCard class="mx-auto max-w-2xl" hover3d glowIntensity="high">
             <div class="space-y-6">
@@ -136,7 +139,7 @@
       </section>
     </main>
 
-    <footer id="about" class="relative z-10 border-t border-white/10 px-4 py-12">
+    <footer id="about" class="relative z-10 border-t border-white/10 px-4 py-12 scroll-mt-[calc(var(--header-height,0px)+1.5rem)]">
       <div class="container mx-auto flex flex-col items-center justify-between gap-6 text-sm text-text-muted md:flex-row">
         <div class="flex items-center gap-2">
           <Star class="h-6 w-6 text-violet" fill="currentColor" />

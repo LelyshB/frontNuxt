@@ -166,6 +166,16 @@
     transform: translateX(100%);
   }
 
+  .astro-mask {
+    clip-path: inset(10% round 1.5rem);
+  }
+
+  @supports not (clip-path: inset(10%)) {
+    .astro-mask {
+      clip-path: none;
+    }
+  }
+
   /* Gradient Text */
   .gradient-text {
     @apply bg-gradient-to-r from-amethyst to-aurora-teal bg-clip-text text-transparent;
