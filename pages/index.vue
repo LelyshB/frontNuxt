@@ -10,8 +10,11 @@
 
     <AppHeader class="relative z-20" />
 
-    <main class="relative z-10">
-      <section id="hero" class="flex min-h-screen items-center justify-center px-4 pt-24">
+    <main class="relative z-10 pt-[var(--header-height,0px)]">
+      <section
+        id="hero"
+        class="grid min-h-[calc(100dvh-var(--header-height,0px))] place-items-center px-4 scroll-mt-[calc(var(--header-height,0px)+1.5rem)]"
+      >
         <div class="container mx-auto max-w-4xl text-center">
           <div class="space-y-8" data-parallax="0.6">
             <div class="space-y-4">
@@ -49,10 +52,8 @@
       <CompatibilityTeaser />
 
       <section
-        ref="zodiacSectionRef"
         id="zodiac"
-        class="group/zodiac py-24 px-4"
-        :data-in-view="zodiacInView ? 'true' : null"
+        class="py-24 px-4 scroll-mt-[calc(var(--header-height,0px)+1.5rem)]"
       >
         <div class="container mx-auto">
           <SectionHeader
@@ -63,28 +64,34 @@
             titleGradient
           />
 
-          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            <div
-              v-for="(sign, index) in zodiacSigns"
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <CardGloss
+              v-for="sign in zodiacSigns"
               :key="sign.name"
-              class="transform-gpu opacity-0 [animation:fade-up_0.72s_var(--ease-cosmic)_forwards] [animation-delay:var(--delay)] [animation-fill-mode:forwards] [animation-play-state:paused] group-data-[in-view=true]/zodiac:[animation-play-state:running] motion-reduce:opacity-100 motion-reduce:[animation:none]"
-              :style="{ '--delay': getStaggerDelay(index) }"
+              data-reveal
+              class="opacity-0 motion-reduce:opacity-100 [&>div]:p-5 [&>div]:lg:p-6"
+              :style="{ animationFillMode: 'forwards' }"
             >
-              <ZodiacBadge :name="sign.name" :dateRange="sign.dateRange" :description="sign.description">
-                <template #icon>
-                  <OrbitIcon
-                    :icon="sign.Icon"
-                    size="lg"
-                    class="mx-auto transition-transform duration-500 ease-[var(--ease-cosmic)]"
+              <div class="flex h-full flex-col items-center gap-5 text-center">
+                <div class="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-violet via-magenta to-magenta/80 text-white shadow-[0_18px_38px_rgba(147,51,234,0.28)] transition-transform duration-500 ease-[var(--ease-cosmic)] group-hover:rotate-[8deg] group-hover:scale-110 motion-reduce:transform-none">
+                  <component
+                    :is="sign.Icon"
+                    class="h-7 w-7 transition-transform duration-500 group-hover:scale-110"
                   />
-                </template>
-              </ZodiacBadge>
-            </div>
+                  <span class="pointer-events-none absolute inset-0 bg-gradient-to-r from-white/10 via-transparent to-white/30 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                </div>
+                <div class="space-y-2.5">
+                  <h3 class="font-heading text-lg font-semibold text-text-base">{{ sign.name }}</h3>
+                  <p class="text-[0.7rem] font-semibold uppercase tracking-[0.38em] text-text-muted/60">{{ sign.dateRange }}</p>
+                  <p class="text-sm leading-relaxed text-text-muted/90">{{ sign.description }}</p>
+                </div>
+              </div>
+            </CardGloss>
           </div>
         </div>
       </section>
 
-      <section id="services" class="py-24 px-4">
+      <section id="services" class="py-24 px-4 scroll-mt-[calc(var(--header-height,0px)+1.5rem)]">
         <div class="container mx-auto">
           <SectionHeader
             subtitle="Cosmic Services"
@@ -96,7 +103,7 @@
         </div>
       </section>
 
-      <section id="cta" class="py-24 px-4">
+      <section id="cta" class="py-24 px-4 scroll-mt-[calc(var(--header-height,0px)+1.5rem)]">
         <div class="container mx-auto text-center">
           <GlowCard class="mx-auto max-w-2xl" hover3d glowIntensity="high">
             <div class="space-y-6">
@@ -132,7 +139,7 @@
       </section>
     </main>
 
-    <footer id="about" class="relative z-10 border-t border-white/10 px-4 py-12">
+    <footer id="about" class="relative z-10 border-t border-white/10 px-4 py-12 scroll-mt-[calc(var(--header-height,0px)+1.5rem)]">
       <div class="container mx-auto flex flex-col items-center justify-between gap-6 text-sm text-text-muted md:flex-row">
         <div class="flex items-center gap-2">
           <Star class="h-6 w-6 text-violet" fill="currentColor" />
@@ -155,13 +162,12 @@ import AppHeader from '@/components/AppHeader.vue'
 import CompatibilityTeaser from '@/components/CompatibilityTeaser.vue'
 import DeckTeaser from '@/components/DeckTeaser.vue'
 import GlowCard from '@/components/GlowCard.vue'
-import OrbitIcon from '@/components/OrbitIcon.vue'
+import CardGloss from '@/components/CardGloss.vue'
 import SectionHeader from '@/components/SectionHeader.vue'
 import ServicesCarousel from '@/components/ServicesCarousel.vue'
 import StarfieldCanvas from '@/components/StarfieldCanvas.vue'
-import ZodiacBadge from '@/components/ZodiacBadge.vue'
 import { ArrowRight, ChevronDown, Crown, Droplet, Heart, Moon, Shield, Sparkles, Star, Target, Wind, Zap } from 'lucide-vue-next'
-import { useInView } from '@/composables/useInView'
+import { useStaggeredReveal } from '@/composables/useStaggeredReveal'
 
 const zodiacSigns = [
   { name: 'Aries', dateRange: 'Mar 21 - Apr 19', Icon: Star, description: 'Bold and pioneering spirit' },
@@ -178,13 +184,7 @@ const zodiacSigns = [
   { name: 'Pisces', dateRange: 'Feb 19 - Mar 20', Icon: Droplet, description: 'Compassionate and artistic soul' },
 ]
 
-const { target: zodiacSectionRef, isInView: zodiacInView, getStaggerDelay } = useInView({
-  rootMargin: '-20% 0px',
-  threshold: 0.18,
-  groupSize: 4,
-  groupDelay: 160,
-  itemDelay: 60,
-})
+useStaggeredReveal('[data-reveal]', 100)
 
 const parallaxElements = ref<HTMLElement[]>([])
 let scrollHandler: (() => void) | null = null

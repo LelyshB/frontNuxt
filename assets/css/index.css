@@ -143,14 +143,37 @@
 @layer components {
   /* Glass Effect */
   .glass-surface {
-    @apply backdrop-blur-xl border;
-    background-color: hsl(var(--surface) / 0.8);
-    border-color: var(--border-default);
+    @apply relative rounded-2xl border border-white/5 backdrop-blur-xl;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
   }
 
   .glass-hover:hover {
     background-color: hsl(var(--surface) / 0.9);
     border-color: var(--border-hover);
+  }
+
+  .gloss {
+    @apply relative overflow-hidden;
+  }
+
+  .gloss::before {
+    content: "";
+    @apply absolute inset-0 -translate-x-full rounded-2xl bg-gradient-to-r from-transparent via-white/5 to-transparent;
+    transition: transform 1s linear;
+  }
+
+  .group:hover .gloss::before {
+    transform: translateX(100%);
+  }
+
+  .astro-mask {
+    clip-path: inset(10% round 1.5rem);
+  }
+
+  @supports not (clip-path: inset(10%)) {
+    .astro-mask {
+      clip-path: none;
+    }
   }
 
   /* Gradient Text */
