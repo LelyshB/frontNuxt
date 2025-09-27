@@ -10,17 +10,24 @@
       />
 
       <div
-        class="group relative mx-auto flex w-full max-w-[520px] select-none items-center justify-center"
+        class="group relative mx-auto flex w-full max-w-[720px] select-none items-center justify-center"
       >
-        <div class="relative h-[260px] w-full [perspective:1200px]">
+        <div class="relative h-[320px] w-full [perspective:1400px]">
           <a
             v-for="card in cards"
             :key="card.id"
             href="/tarot"
             class="deck-card focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-950 focus-visible:ring-violet/40"
             :aria-label="`Tarot card: ${card.title}`"
+            :style="{
+              '--deck-rotate': card.rotate,
+              '--deck-offset': card.offset,
+              '--deck-tilt': card.tilt,
+              '--deck-transform-hover': card.hover,
+              '--deck-z': card.zIndex,
+            }"
           >
-            <GlowCard hover3d class="h-64 w-44">
+            <GlowCard hover3d class="h-72 w-48 md:h-80 md:w-52">
               <div class="flex h-full w-full flex-col items-center justify-center space-y-3 rounded-xl text-center">
                 <div class="h-10 w-10 rounded-full bg-gradient-to-br from-violet to-aurora-teal opacity-80" />
                 <div class="font-heading text-lg font-semibold text-text-base">
@@ -49,9 +56,66 @@ import GlowCard from '@/components/GlowCard.vue'
 import SectionHeader from '@/components/SectionHeader.vue'
 
 const cards = [
-  { id: 'left', title: 'Intuition', hint: 'Clarity emerges' },
-  { id: 'mid', title: 'Focus', hint: 'A path reveals' },
-  { id: 'right', title: 'Change', hint: 'Turn the page' },
+  {
+    id: 'far-left',
+    title: 'Intuition',
+    hint: 'Clarity emerges',
+    rotate: '-28deg',
+    offset: '-220px',
+    tilt: '1.6deg',
+    hover: 'translate(-50%, -50%) rotate(-32deg) translateX(-260px)',
+    zIndex: '1',
+  },
+  {
+    id: 'left',
+    title: 'Focus',
+    hint: 'A path reveals',
+    rotate: '-18deg',
+    offset: '-150px',
+    tilt: '1.5deg',
+    hover: 'translate(-50%, -50%) rotate(-22deg) translateX(-190px)',
+    zIndex: '2',
+  },
+  {
+    id: 'left-mid',
+    title: 'Insight',
+    hint: 'Truth finds you',
+    rotate: '-8deg',
+    offset: '-60px',
+    tilt: '1.4deg',
+    hover: 'translate(-50%, -50%) rotate(-10deg) translateX(-90px) rotateY(-12deg)',
+    zIndex: '3',
+  },
+  {
+    id: 'right-mid',
+    title: 'Harmony',
+    hint: 'Balance is restored',
+    rotate: '8deg',
+    offset: '60px',
+    tilt: '1.4deg',
+    hover: 'translate(-50%, -50%) rotate(10deg) translateX(90px) rotateY(12deg)',
+    zIndex: '3',
+  },
+  {
+    id: 'right',
+    title: 'Destiny',
+    hint: 'Your call awaits',
+    rotate: '18deg',
+    offset: '150px',
+    tilt: '1.5deg',
+    hover: 'translate(-50%, -50%) rotate(22deg) translateX(190px)',
+    zIndex: '2',
+  },
+  {
+    id: 'far-right',
+    title: 'Vision',
+    hint: 'See beyond now',
+    rotate: '28deg',
+    offset: '220px',
+    tilt: '1.6deg',
+    hover: 'translate(-50%, -50%) rotate(32deg) translateX(260px)',
+    zIndex: '1',
+  },
 ]
 </script>
 
@@ -62,30 +126,10 @@ const cards = [
   left: 50%;
   display: block;
   transform-style: preserve-3d;
-  transform: translate(-50%, -50%) rotate(var(--deck-rotate)) translateX(var(--deck-offset));
+  transform: translate(-50%, -50%) rotate(var(--deck-rotate, 0deg)) translateX(var(--deck-offset, 0px));
   transition: transform 0.8s var(--ease-cosmic);
   animation: deck-wiggle 12s ease-in-out infinite;
-}
-
-.deck-card:nth-child(1) {
-  --deck-rotate: -12deg;
-  --deck-offset: -92px;
-  --deck-tilt: 1.2deg;
-  --deck-transform-hover: translate(-50%, -50%) rotate(-16deg) translateX(-120px);
-}
-
-.deck-card:nth-child(2) {
-  --deck-rotate: -1deg;
-  --deck-offset: 0px;
-  --deck-tilt: 1.6deg;
-  --deck-transform-hover: translate(-50%, -50%) rotate(-3deg) translateX(0px) rotateY(16deg);
-}
-
-.deck-card:nth-child(3) {
-  --deck-rotate: 11deg;
-  --deck-offset: 92px;
-  --deck-tilt: 1.1deg;
-  --deck-transform-hover: translate(-50%, -50%) rotate(15deg) translateX(120px);
+  z-index: var(--deck-z, 1);
 }
 
 .group:hover .deck-card,
@@ -94,27 +138,25 @@ const cards = [
 }
 
 .group:hover .deck-card {
-  transform: var(--deck-transform-hover);
+  transform: var(--deck-transform-hover, translate(-50%, -50%) rotate(var(--deck-rotate, 0deg)) translateX(var(--deck-offset, 0px)));
 }
 
 @keyframes deck-wiggle {
   0%,
   100% {
-    transform: translate(-50%, -50%) rotate(var(--deck-rotate)) translateX(var(--deck-offset));
+    transform: translate(-50%, -50%) rotate(var(--deck-rotate, 0deg)) translateX(var(--deck-offset, 0px));
   }
   50% {
-    transform: translate(-50%, calc(-50% - 6px)) rotate(calc(var(--deck-rotate) + var(--deck-tilt)))
-      translateX(calc(var(--deck-offset) * 1.04));
+    transform: translate(-50%, calc(-50% - 6px)) rotate(calc(var(--deck-rotate, 0deg) + var(--deck-tilt, 0deg)))
+      translateX(calc(var(--deck-offset, 0px) * 1.04));
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .deck-card {
     animation: none;
-    transform: translate(-50%, -50%) rotate(var(--deck-rotate)) translateX(var(--deck-offset));
-  }
-  .deck-card:nth-child(2) {
-    --deck-transform-hover: translate(-50%, -50%) rotate(-2deg) translateX(0px);
+    transform: translate(-50%, -50%) rotate(var(--deck-rotate, 0deg)) translateX(var(--deck-offset, 0px));
+    --deck-transform-hover: translate(-50%, -50%) rotate(var(--deck-rotate, 0deg)) translateX(var(--deck-offset, 0px));
   }
 }
 </style>

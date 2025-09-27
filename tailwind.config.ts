@@ -115,12 +115,12 @@ const config: Config = {
           to: { transform: 'rotate(360deg)' },
         },
         shimmer: {
-          '0%, 100%': { transform: 'translateX(-100%)' },
-          '50%': { transform: 'translateX(100%)' },
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
         },
         'fade-in-up': {
-          from: { opacity: '0', transform: 'translateY(20px)' },
-          to: { opacity: '1', transform: 'translateY(0)' },
+          '0%': { opacity: '0', transform: 'translateY(16px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
         },
         tilt: {
           '0%, 100%': { transform: 'rotate(0deg)' },
@@ -132,8 +132,8 @@ const config: Config = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         orbit: 'orbit 20s linear infinite',
-        shimmer: 'shimmer 2.3s ease-in-out infinite',
-        'fade-in-up': 'fade-in-up 0.6s ease-out',
+        shimmer: 'shimmer 1000ms linear',
+        'fade-in-up': 'fade-in-up 600ms cubic-bezier(0.22,1,0.36,1) forwards',
         tilt: 'tilt 0.6s ease-in-out',
       },
     },
