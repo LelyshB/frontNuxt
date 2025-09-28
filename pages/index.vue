@@ -64,12 +64,12 @@
             titleGradient
           />
 
-          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-4 lg:grid-cols-6">
             <CardGloss
               v-for="sign in zodiacSigns"
               :key="sign.name"
               data-reveal
-              class="opacity-0 motion-reduce:opacity-100 [&>div]:p-5 [&>div]:lg:p-6"
+              class="group h-full opacity-0 motion-reduce:opacity-100 [&>div]:p-5 [&>div]:lg:p-6"
               :style="{ animationFillMode: 'forwards' }"
             >
               <div class="flex h-full flex-col items-center gap-5 text-center">
