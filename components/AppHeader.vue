@@ -163,6 +163,10 @@ onMounted(() => {
   if (sections.length) {
     sectionObserver = new IntersectionObserver(
       (entries) => {
+        if (window.scrollY <= 20) {
+          activeSection.value = null
+          return
+        }
         const visible = entries
           .filter(isSectionEntry)
           .filter((entry) => entry.isIntersecting)

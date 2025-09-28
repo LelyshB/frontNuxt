@@ -8,7 +8,7 @@
       data-parallax="0.3"
     />
 
-    <AppHeader class="relative z-20" />
+    <AppHeader />
 
     <main class="relative z-10 pt-[var(--header-height,0px)]">
       <section
