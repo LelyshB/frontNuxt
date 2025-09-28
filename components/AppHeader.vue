@@ -3,7 +3,7 @@
     <nav
       ref="navRef"
       data-header-pill
-      class="sticky top-6 z-50 mx-auto w-[min(1200px,92%)] rounded-full bg-black/60 backdrop-blur px-6 py-4 transition-all motion-safe:duration-300 motion-reduce:transition-none data-[scrolled=true]:py-2 data-[scrolled=true]:ring-1 data-[scrolled=true]:ring-white/10 data-[scrolled=true]:shadow-md"
+      class="sticky top-6 z-50 mx-auto w-[min(1200px,92%)] rounded-full bg-black/60 backdrop-blur px-6 py-4 transition-all motion-safe:duration-300 motion-reduce:transition-none ring-0 shadow-none data-[scrolled=true]:py-2 data-[scrolled=true]:ring-1 data-[scrolled=true]:ring-white/10 data-[scrolled=true]:shadow-md"
     >
       <div class="flex items-center justify-between gap-4">
         <a href="#hero" class="flex items-center gap-3 text-text-base focus-cosmic">
@@ -21,7 +21,7 @@
           <li v-for="item in navItems" :key="item.name">
             <NuxtLink
               :to="item.href"
-              class="group relative px-4 py-2 text-sm font-medium text-slate-200 transition-colors motion-safe:transition-colors motion-safe:duration-300 hover:text-white focus-visible:outline-none focus-visible:rounded-full focus-visible:ring-2 focus-visible:ring-pink-500/60 after:content-[''] after:absolute after:left-3 after:right-3 after:-bottom-1 after:h-[2px] after:origin-left after:scale-x-0 after:rounded-full after:bg-gradient-to-r after:from-fuchsia-400 after:to-pink-500 motion-safe:after:transition-transform motion-safe:after:duration-300 group-hover:after:scale-x-100 focus-visible:after:scale-x-100"
+              class="group relative px-4 py-2 text-sm font-medium text-slate-200 transition-colors motion-safe:transition-colors motion-safe:duration-300 hover:text-white focus-visible:text-white focus-visible:outline-none focus-visible:rounded-full focus-visible:ring-2 focus-visible:ring-pink-500/60 after:content-[''] after:absolute after:left-3 after:right-3 after:-bottom-1 after:h-[2px] after:origin-left after:scale-x-0 after:rounded-full after:bg-gradient-to-r after:from-fuchsia-400 after:to-pink-500 motion-safe:after:transition-transform motion-safe:after:duration-300 group-hover:after:scale-x-100 focus-visible:after:scale-x-100"
               :class="{
                 'text-white after:scale-x-100': activeSection === item.href,
               }"

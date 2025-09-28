@@ -1,6 +1,7 @@
 export default defineNuxtPlugin(() => {
   const el = document.querySelector<HTMLElement>('[data-header-pill]')
   if (!el) return
+  el.dataset.scrolled = 'false'
 
   // Sentinel ~20px from top. When it leaves the viewport, we mark "scrolled".
   const sentinel = document.createElement('div')
@@ -10,9 +11,12 @@ export default defineNuxtPlugin(() => {
   sentinel.style.height = '1px'
   document.body.prepend(sentinel)
 
-  const io = new IntersectionObserver(([entry]) => {
-    el.toggleAttribute('data-scrolled', !entry.isIntersecting)
-  }, { root: null, threshold: 1 })
+  const io = new IntersectionObserver(
+    ([entry]) => {
+      el.dataset.scrolled = entry?.isIntersecting ? 'false' : 'true'
+    },
+    { root: null, threshold: 1 },
+  )
 
   io.observe(sentinel)
 })
