@@ -51,11 +51,11 @@
       <DeckTeaser />
       <CompatibilityTeaser />
 
-      <section
-        id="zodiac"
-        class="py-24 px-4 scroll-mt-[calc(var(--header-height,0px)+1.5rem)]"
-      >
-        <div class="container mx-auto">
+      <section class="py-24 px-4">
+        <div
+          id="zodiac"
+          class="mx-auto w-[min(1200px,92%)] scroll-mt-[calc(var(--header-height,0px)+1.5rem)]"
+        >
           <SectionHeader
             subtitle="Your Cosmic Blueprint"
             title="Discover Your Zodiac Sign"
@@ -64,21 +64,29 @@
             titleGradient
           />
 
-          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            <CardGloss
+          <div
+            id="zodiac-grid"
+            class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-x-6 gap-y-8 xl:gap-x-7 xl:gap-y-9"
+          >
+            <a
               v-for="sign in zodiacSigns"
               :key="sign.name"
+              href="#readings"
               data-reveal
-              class="opacity-0 motion-reduce:opacity-100 [&>div]:p-5 [&>div]:lg:p-6"
+              class="group relative rounded-2xl bg-white/5 ring-1 ring-white/10 transition-all motion-safe:duration-300 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500/60 hover:bg-white/10 hover:ring-pink-400/50 motion-safe:hover:scale-[1.02] opacity-0 motion-reduce:opacity-100"
               :style="{ animationFillMode: 'forwards' }"
             >
-              <div class="flex h-full flex-col items-center gap-5 text-center">
-                <div class="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-violet via-magenta to-magenta/80 text-white shadow-[0_18px_38px_rgba(147,51,234,0.28)] transition-transform duration-500 ease-[var(--ease-cosmic)] group-hover:rotate-[8deg] group-hover:scale-110 motion-reduce:transform-none">
+              <span
+                class="pointer-events-none absolute inset-0 rounded-2xl before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-r before:from-fuchsia-500/0 before:to-pink-500/0 before:transition-colors motion-safe:before:duration-300 group-hover:before:from-fuchsia-500/15 group-hover:before:to-pink-500/15"
+              />
+
+              <div class="relative flex h-full flex-col items-center gap-5 p-5 text-center">
+                <div class="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-violet via-magenta to-magenta/80 text-white shadow-[0_18px_38px_rgba(147,51,234,0.28)] transition-transform motion-safe:duration-300 motion-reduce:transition-none motion-safe:group-hover:rotate-[8deg] motion-safe:group-hover:scale-110">
                   <component
                     :is="sign.Icon"
-                    class="h-7 w-7 transition-transform duration-500 group-hover:scale-110"
+                    class="h-7 w-7 transition-transform motion-safe:duration-300 motion-reduce:transition-none motion-safe:group-hover:scale-110"
                   />
-                  <span class="pointer-events-none absolute inset-0 bg-gradient-to-r from-white/10 via-transparent to-white/30 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                  <span class="pointer-events-none absolute inset-0 bg-gradient-to-r from-white/10 via-transparent to-white/30 opacity-0 transition-opacity motion-safe:duration-300 motion-reduce:transition-none group-hover:opacity-100" />
                 </div>
                 <div class="space-y-2.5">
                   <h3 class="font-heading text-lg font-semibold text-text-base">{{ sign.name }}</h3>
@@ -86,7 +94,7 @@
                   <p class="text-sm leading-relaxed text-text-muted/90">{{ sign.description }}</p>
                 </div>
               </div>
-            </CardGloss>
+            </a>
           </div>
         </div>
       </section>
@@ -162,7 +170,6 @@ import AppHeader from '@/components/AppHeader.vue'
 import CompatibilityTeaser from '@/components/CompatibilityTeaser.vue'
 import DeckTeaser from '@/components/DeckTeaser.vue'
 import GlowCard from '@/components/GlowCard.vue'
-import CardGloss from '@/components/CardGloss.vue'
 import SectionHeader from '@/components/SectionHeader.vue'
 import ServicesCarousel from '@/components/ServicesCarousel.vue'
 import StarfieldCanvas from '@/components/StarfieldCanvas.vue'
