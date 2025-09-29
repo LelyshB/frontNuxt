@@ -14,282 +14,228 @@
         titleGradient
       />
 
-      <div class="flex flex-col items-center space-y-8">
+      <div class="flex justify-center">
         <div
-          class="group/compat relative h-40 w-80 overflow-visible rounded-[28px] border border-white/10 bg-surface/70 p-6 shadow-[0_26px_60px_rgba(10,8,35,0.45)] transition-all duration-500 ease-[var(--ease-cosmic)] transform-gpu ring-1 ring-transparent hover:-translate-y-[4px] hover:scale-[1.01] hover:ring-[color:var(--border-hover)] hover:shadow-[0_34px_74px_rgba(10,8,35,0.6)] focus-within:ring-2 focus-within:ring-[color:hsl(var(--violet)/0.45)] focus-within:ring-offset-2 focus-within:ring-offset-bg-950 motion-reduce:hover:translate-y-0 motion-reduce:hover:scale-100"
-          @mouseenter="isPointerOver = true"
-          @mouseleave="isPointerOver = false"
-          @focusin="isFocusWithin = true"
-          @focusout="isFocusWithin = false"
+          class="relative w-full max-w-[420px] overflow-hidden rounded-[36px] border border-white/10 bg-[radial-gradient(140%_90%_at_50%_-30%,rgba(123,68,255,0.35),transparent_60%),linear-gradient(180deg,rgba(19,12,36,0.92)0%,rgba(10,7,24,0.95)100%)] px-12 pb-12 pt-16 text-center shadow-[0_34px_120px_rgba(8,5,24,0.65)] ring-1 ring-white/5 backdrop-blur-[26px]"
         >
           <span
-            class="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-500 ease-[var(--ease-cosmic)] group-hover/compat:opacity-100 group-focus-within/compat:opacity-100"
-            style="background: radial-gradient(130% 150% at 50% -10%, hsla(var(--violet), 0.18), transparent 78%);"
+            class="pointer-events-none absolute inset-x-10 top-0 h-32 rounded-[30px] bg-[radial-gradient(120%_80%_at_50%_10%,rgba(175,111,255,0.35),rgba(85,54,156,0.05))] opacity-90"
+            aria-hidden="true"
           />
           <span
-            class="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-700 ease-[var(--ease-cosmic)] group-hover/compat:opacity-100"
-            style="background: linear-gradient(130deg, hsla(var(--magenta), 0.12), hsla(var(--aurora-teal), 0.14) 55%, transparent);"
+            class="pointer-events-none absolute inset-0 bg-[radial-gradient(130%_100%_at_50%_120%,rgba(255,145,255,0.08),transparent_70%)]"
+            aria-hidden="true"
           />
 
-          <svg class="absolute inset-0 h-full w-full" viewBox="0 0 320 160" aria-hidden="true">
-            <defs>
-              <linearGradient :id="gradientId" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" :stop-color="'hsl(var(--amethyst))'" stop-opacity="0.85" />
-                <stop offset="100%" :stop-color="'hsl(var(--aurora-teal))'" stop-opacity="0.85" />
-              </linearGradient>
-            </defs>
-            <path
-              ref="arcPathRef"
-              d="M 60 140 Q 160 20 260 140"
-              :stroke="`url(#${gradientId})`"
-              stroke-width="3"
-              fill="none"
-              :stroke-dasharray="arcDashArray"
-              :stroke-dashoffset="arcDashOffset"
-              class="transition-[filter] duration-500 ease-[var(--ease-cosmic)] group-hover/compat:[filter:drop-shadow(0_0_22px_hsl(var(--aurora-teal)/0.55))]"
-            />
-            <circle
-              v-for="(particle, index) in particles"
-              :key="index"
-              :cx="particle.cx"
-              :cy="particle.cy"
-              :r="particle.r"
-              :fill="particle.fill"
-              :opacity="particle.opacity"
-            />
-          </svg>
-
-          <div
-            class="absolute left-0 bottom-0 flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border border-amethyst/25 bg-white/5 backdrop-blur-sm transition-all duration-500 ease-[var(--ease-cosmic)] [transform:translate3d(0,var(--float,0px),0)] ring-1 ring-transparent group-hover/compat:ring-[color:var(--border-hover)] group-hover/compat:shadow-[0_0_32px_hsl(var(--amethyst)/0.45)]"
-            :style="leftOrbStyle"
-          >
-            <span
-              class="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle,hsla(var(--violet),0.45),transparent_70%)] opacity-0 transition-opacity duration-500 ease-[var(--ease-cosmic)] group-hover/compat:opacity-80 group-hover/compat:animate-[orb-glow_2s_ease-in-out_infinite] motion-reduce:group-hover/compat:animate-none"
-            />
-            <div class="h-6 w-6 rounded-full bg-amethyst" />
-          </div>
-
-          <div
-            class="absolute right-0 bottom-0 flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border border-aurora-teal/25 bg-white/5 backdrop-blur-sm transition-all duration-500 ease-[var(--ease-cosmic)] [transform:translate3d(0,var(--float,0px),0)] ring-1 ring-transparent group-hover/compat:ring-[color:var(--border-hover)] group-hover/compat:shadow-[0_0_32px_hsl(var(--aurora-teal)/0.45)]"
-            :style="rightOrbStyle"
-          >
-            <span
-              class="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle,hsla(var(--aurora-teal),0.45),transparent_70%)] opacity-0 transition-opacity duration-500 ease-[var(--ease-cosmic)] group-hover/compat:opacity-80 group-hover/compat:animate-[orb-glow_2s_ease-in-out_infinite] motion-reduce:group-hover/compat:animate-none"
-            />
-            <div class="h-6 w-6 rounded-full bg-aurora-teal" />
-          </div>
-
-          <div class="absolute top-4 left-1/2 -translate-x-1/2 text-center">
-            <div class="gradient-text text-2xl font-heading font-bold drop-shadow-[0_0_18px_rgba(155,92,255,0.35)]" aria-live="polite">
+          <div class="relative z-10">
+            <div
+              class="font-heading text-[56px] font-semibold leading-none text-white drop-shadow-[0_0_26px_rgba(140,82,255,0.55)]"
+              aria-live="polite"
+            >
               {{ displayedScore }}%
             </div>
-            <div class="text-xs font-medium uppercase tracking-[0.2em] text-text-muted">Cosmic Match</div>
+            <div class="mt-2 text-sm font-medium uppercase tracking-[0.65em] text-white/45">
+              Cosmic Match
+            </div>
           </div>
-        </div>
 
-        <div class="w-full max-w-md space-y-4">
-          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <label class="flex flex-col gap-2 text-sm font-medium text-text-muted">
-              <span>Your Birth Date</span>
-              <input
-                v-model="birth1"
-                type="text"
-                inputmode="numeric"
-                placeholder="DD.MM.YYYY"
-                class="glass-surface w-full rounded-lg border border-amethyst/20 px-4 py-3 text-text-base transition-colors focus-cosmic focus:border-amethyst/50"
-              />
-            </label>
-            <label class="flex flex-col gap-2 text-sm font-medium text-text-muted">
-              <span>Their Birth Date</span>
-              <input
-                v-model="birth2"
-                type="text"
-                inputmode="numeric"
-                placeholder="DD.MM.YYYY"
-                class="glass-surface w-full rounded-lg border border-aurora-teal/20 px-4 py-3 text-text-base transition-colors focus-cosmic focus:border-aurora-teal/50"
-              />
-            </label>
+          <div class="relative z-10 mt-10 flex h-32 w-full items-center justify-center">
+            <svg class="h-full w-full" viewBox="0 0 360 200" role="presentation" aria-hidden="true">
+              <defs>
+                <linearGradient :id="gradientId" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="rgba(198,126,255,0.95)" />
+                  <stop offset="55%" stop-color="rgba(216,133,255,1)" />
+                  <stop offset="100%" stop-color="rgba(124,210,255,0.95)" />
+                </linearGradient>
+                <radialGradient :id="orbGradientId" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="rgba(255,255,255,0.95)" />
+                  <stop offset="60%" stop-color="rgba(203,149,255,0.65)" />
+                  <stop offset="100%" stop-color="rgba(120,60,190,0)" />
+                </radialGradient>
+              </defs>
+              <g transform="translate(12, 0)">
+                <path
+                  ref="arcPathRef"
+                  d="M 30 170 Q 168 46 306 170"
+                  :stroke="`url(#${gradientId})`"
+                  stroke-width="5"
+                  stroke-linecap="round"
+                  fill="none"
+                  :stroke-dasharray="arcDashArray"
+                  :stroke-dashoffset="arcDashOffset"
+                  class="[filter:drop-shadow(0_0_22px_rgba(189,115,255,0.45))]"
+                />
+                <circle
+                  :cx="connectionPoint.x"
+                  :cy="connectionPoint.y"
+                  r="14"
+                  :fill="`url(#${orbGradientId})`"
+                  :opacity="orbOpacity"
+                />
+              </g>
+            </svg>
           </div>
-          <div class="pt-2 text-center">
-            <a href="/compat" class="btn-cosmic" aria-label="Check compatibility">
-              Check compatibility
-            </a>
+
+          <div class="relative z-10 mt-10 flex w-full justify-between text-lg font-medium text-white/85">
+            <span class="tracking-[0.08em] text-white/80">Artem</span>
+            <span class="tracking-[0.08em] text-white/80">Olga</span>
+          </div>
+          <div class="relative z-10 mt-6 text-xs uppercase tracking-[0.75em] text-white/35">
+            Orbital Synastry
           </div>
         </div>
+      </div>
+
+      <div class="mt-10 text-center">
+        <NuxtLink to="/compat" class="btn-cosmic inline-flex items-center justify-center" aria-label="Check compatibility">
+          Check compatibility
+        </NuxtLink>
       </div>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue'
 import SectionHeader from '@/components/SectionHeader.vue'
 import { useInView } from '@/composables/useInView'
 
-const birth1 = ref('')
-const birth2 = ref('')
 const displayedScore = ref(0)
-const targetScore = 87
-const isPointerOver = ref(false)
-const isFocusWithin = ref(false)
-const floatY = ref(0)
-const reduced = ref(false)
-const gradientId = `arc-gradient-${Math.random().toString(36).slice(2, 9)}`
+const targetScore = 87 as number
+const animationDuration = 5000
+
+// stable, collision-safe IDs for gradients
+const sanitizeId = (value: string) => value.replace(/[^a-zA-Z0-9_-]/g, '') || 'id'
+const gradientId = `compatibility-arc-${sanitizeId(useId())}`
+const orbGradientId = `compatibility-orb-${sanitizeId(useId())}`
+
 const arcPathRef = ref<SVGPathElement | null>(null)
 const arcLength = ref(0)
 const arcDashOffset = ref(0)
 const arcDashArray = computed(() => arcLength.value)
-let floatFrame: number | null = null
-let arcFrame: number | null = null
+
+const connectionPoint = ref({ x: 30, y: 170 })
+const prefersReducedMotion = ref(false)
+
+const orbOpacity = computed(() => {
+  const progress = targetScore === 0 ? 0 : displayedScore.value / targetScore
+  return 0.35 + Math.min(Math.max(progress, 0), 1) * 0.6
+})
+
+let animationFrame: number | null = null
 let mediaQuery: MediaQueryList | null = null
 let mediaQueryListener: ((event: MediaQueryListEvent) => void) | null = null
-let arcPlayed = false
+let resizeListener: (() => void) | null = null
+let animationStarted = false
 
-const particles = [
-  { cx: 120, cy: 80, r: 2, fill: 'hsl(var(--amethyst))', opacity: 0.6 },
-  { cx: 160, cy: 40, r: 1.5, fill: 'hsl(200 95% 70%)', opacity: 0.8 },
-  { cx: 200, cy: 60, r: 2.5, fill: 'hsl(var(--aurora-teal))', opacity: 0.5 },
-]
-
-const isInteractive = computed(() => isPointerOver.value || isFocusWithin.value)
-const paused = computed(() => isInteractive.value)
-
-const orbGlow = computed(() => (isInteractive.value ? 0.55 : 0.35))
-
-const leftOrbStyle = computed(() => ({
-  '--float': `${floatY.value}px`,
-  boxShadow: `0 0 26px hsl(var(--amethyst) / ${orbGlow.value})`,
-}))
-
-const rightOrbStyle = computed(() => ({
-  '--float': `${-floatY.value}px`,
-  boxShadow: `0 0 26px hsl(var(--aurora-teal) / ${orbGlow.value})`,
-}))
-
-const stopFloatAnimation = () => {
-  if (floatFrame !== null && typeof window !== 'undefined') {
-    cancelAnimationFrame(floatFrame)
-    floatFrame = null
-  }
-  floatY.value = 0
-}
-
-const floatStep = () => {
-  if (typeof window === 'undefined') return
-  const now = performance.now()
-  floatY.value = Math.sin(now * 0.002) * 6
-  floatFrame = requestAnimationFrame(floatStep)
-}
-
-const startFloatAnimation = () => {
-  if (reduced.value || paused.value || floatFrame !== null || typeof window === 'undefined') {
-    return
-  }
-  floatFrame = requestAnimationFrame(floatStep)
-}
-
-const stopArcAnimation = () => {
-  if (arcFrame !== null && typeof window !== 'undefined') {
-    cancelAnimationFrame(arcFrame)
-    arcFrame = null
-  }
+const updateConnectionPoint = (progress: number) => {
+  const path = arcPathRef.value
+  if (!path || arcLength.value === 0) return
+  const length = arcLength.value * progress
+  const point = path.getPointAtLength(length)
+  connectionPoint.value = { x: point.x, y: point.y }
 }
 
 const updateArcMetrics = () => {
-  if (typeof window === 'undefined') return
   const path = arcPathRef.value
   if (!path) return
   const length = path.getTotalLength()
   arcLength.value = length
   arcDashOffset.value = length
+  updateConnectionPoint(0)
+}
+
+const stopAnimation = () => {
+  if (animationFrame !== null && typeof window !== 'undefined') {
+    cancelAnimationFrame(animationFrame)
+    animationFrame = null
+  }
+  animationStarted = false
 }
 
 const playArcSequence = () => {
-  if (arcPlayed) return
+  if (animationStarted) return
+  animationStarted = true
   updateArcMetrics()
-  arcPlayed = true
-  if (reduced.value || typeof window === 'undefined') {
+
+  if (prefersReducedMotion.value || typeof window === 'undefined') {
     arcDashOffset.value = 0
     displayedScore.value = targetScore
+    updateConnectionPoint(1)
     return
   }
-  const startOffset = arcLength.value
-  const start = performance.now()
-  const duration = 1000
 
+  const start = performance.now()
   const tick = (now: number) => {
-    const progress = Math.min((now - start) / duration, 1)
-    arcDashOffset.value = startOffset * (1 - progress)
+    const elapsed = now - start
+    const progress = Math.min(elapsed / animationDuration, 1)
+    arcDashOffset.value = arcLength.value * (1 - progress)
     displayedScore.value = Math.round(progress * targetScore)
+    updateConnectionPoint(progress)
+
     if (progress < 1) {
-      arcFrame = requestAnimationFrame(tick)
+      animationFrame = requestAnimationFrame(tick)
     } else {
-      arcFrame = null
+      animationFrame = null
       displayedScore.value = targetScore
+      updateConnectionPoint(1)
     }
   }
 
-  arcFrame = requestAnimationFrame(tick)
+  animationFrame = requestAnimationFrame(tick)
 }
 
 const { target: sectionRef, isInView } = useInView({
-  threshold: 0.25,
-  rootMargin: '-20% 0px',
+  threshold: 0.6,
+  rootMargin: '0px 0px',
   once: true,
-  onEnter: () => {
-    playArcSequence()
-  },
+  onEnter: () => playArcSequence(),
 })
 
 watch(
-  () => [paused.value, reduced.value],
-  ([isPaused, isReduced]) => {
-    if (isPaused || isReduced) {
-      stopFloatAnimation()
-    } else {
-      startFloatAnimation()
-    }
-  },
-  { immediate: true }
-)
-
-watch(
-  () => reduced.value,
+  () => prefersReducedMotion.value,
   (value) => {
     if (value) {
-      stopFloatAnimation()
-      stopArcAnimation()
+      stopAnimation()
       arcDashOffset.value = 0
       displayedScore.value = targetScore
+      updateConnectionPoint(1)
+    } else if (isInView.value && !animationStarted) {
+      playArcSequence()
     }
   }
 )
 
 onMounted(() => {
   if (typeof window === 'undefined') return
+
   mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-  reduced.value = mediaQuery.matches
+  prefersReducedMotion.value = mediaQuery.matches
   mediaQueryListener = (event: MediaQueryListEvent) => {
-    reduced.value = event.matches
-    if (!event.matches && isInView.value && !arcPlayed) {
-      playArcSequence()
-    }
+    prefersReducedMotion.value = event.matches
+    if (!event.matches && isInView.value && !animationStarted) playArcSequence()
   }
   mediaQuery.addEventListener('change', mediaQueryListener)
+
+  resizeListener = () => {
+    const wasAtEnd = arcDashOffset.value === 0
+    updateArcMetrics()
+    if (wasAtEnd) {
+      arcDashOffset.value = 0
+      updateConnectionPoint(1)
+    }
+  }
+  window.addEventListener('resize', resizeListener)
+
   nextTick(() => {
     updateArcMetrics()
-    if (isInView.value) {
-      playArcSequence()
-    }
+    if (isInView.value) playArcSequence()
   })
-  startFloatAnimation()
 })
 
 onBeforeUnmount(() => {
-  stopFloatAnimation()
-  stopArcAnimation()
-  if (mediaQuery && mediaQueryListener) {
-    mediaQuery.removeEventListener('change', mediaQueryListener)
-  }
+  stopAnimation()
+  if (mediaQuery && mediaQueryListener) mediaQuery.removeEventListener('change', mediaQueryListener)
+  if (resizeListener) window.removeEventListener('resize', resizeListener)
 })
 </script>
